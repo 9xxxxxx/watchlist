@@ -1,0 +1,2637 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://tutorial.helloflask.com/hello/ -->
+<html lang="zh" class="js-focus-visible js no-touch" data-js-focus-visible=""><script id="allow-copy_script">(function agent() {
+    let unlock = false
+    document.addEventListener('allow_copy', (event) => {
+      unlock = event.detail.unlock
+    })
+
+    const copyEvents = [
+      'copy',
+      'cut',
+      'contextmenu',
+      'selectstart',
+      'mousedown',
+      'mouseup',
+      'mousemove',
+      'keydown',
+      'keypress',
+      'keyup',
+    ]
+    const rejectOtherHandlers = (e) => {
+      if (unlock) {
+        e.stopPropagation()
+        if (e.stopImmediatePropagation) e.stopImmediatePropagation()
+      }
+    }
+    copyEvents.forEach((evt) => {
+      document.documentElement.addEventListener(evt, rejectOtherHandlers, {
+        capture: true,
+      })
+    })
+  })()</script><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+      
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="使用 Python 和 Flask 开发你的第一个 Web 程序">
+      
+      
+      
+      
+        <link rel="canonical" href="https://tutorial.helloflask.com/hello/">
+      
+      <link rel="icon" href="./index_files/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.5">
+    
+    
+      
+        <title>第 2 章：Hello, Flask! - Flask 入门教程</title>
+      
+    
+    
+      <link rel="stylesheet" href="./index_files/main.cdeb8541.min.css">
+      
+        
+        <link rel="stylesheet" href="./index_files/palette.3f5d1f46.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#000000">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+        <link rel="stylesheet" href="./index_files/css">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="./index_files/extra.css">
+    
+    
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-7VL99X405Z"></script>
+<script>
+if (window.location.hostname != "localhost") {
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7VL99X405Z');
+}
+</script>
+
+    
+
+
+  
+
+
+
+<!-- Open graph meta tags -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Flask 入门教程 - 第 2 章：Hello, Flask!">
+<meta property="og:description" content="使用 Python 和 Flask 开发你的第一个 Web 程序">
+<meta property="og:url" content="https://tutorial.helloflask.com/hello/">
+<meta property="og:image" content="https://tutorial.helloflask.com/_assets/banner.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1280"><style id="lq7var97.aqc">
+            .sav-menu{
+                font-family: Microsoft YaHei,sans-serif;
+                position:fixed;
+                display: block;
+                text-align: left;
+                color: #000;
+                background:rgba(255,255,255,.8);
+                backdrop-filter: blur(5px);
+                border-radius: 4px;
+                padding:6px 12px 10px 9px;
+                /* margin-top: -2px; */
+                z-index: 99999; 
+                font-size: 14px;
+                max-width: 600px;
+                box-shadow: 4px 4px 12px #ccc, -1px -1px 5px #eee;
+                border-top: 2px solid #fff;
+                border-left: 2px solid #fff;
+                transform:scale(1);
+                transition:0.2s;
+                transition-timing-function: ease-out;
+                animation: savOpenAnim 0.15s;
+            }
+            .savCloseAnim{
+                animation: savCloseAnim 0.15s;
+            }
+            @keyframes savOpenAnim {
+                0% {
+                    transform:scale(0.5);
+                    background:rgba(255,255,255,.1);
+                }
+                100% {
+                    transform:scale(1);
+                    background:rgba(255,255,255,.8);
+                }
+            }
+            @keyframes savCloseAnim {
+                0% {
+                    opacity: 1;
+                    transform:scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform:scale(0.5);
+                }
+            }
+            /* 链接相关 */
+            .savlink{
+                margin: 4px 4px 4px 4px;
+                border-radius: 4px;
+                padding: 3px 5px;
+                background: #fff;
+                display: inline-block;
+                transition: 0.2s;
+                transition-timing-function: ease-out;
+                box-shadow: -2px -2px 4px rgb(240 240 240), 2px 2px 4px rgb(70 70 70 / 50%);
+                cursor: pointer;
+                user-select: none;
+            }
+            .savlink:not(.RPdisabled):hover{
+                background: aliceblue;
+                box-shadow: -2px -2px 6px rgb(255 255 255 / 50%), 1px 1px 2px rgb(70 70 70 / 50%), inset -2px -2px 6px rgb(255 255 255 / 50%),inset 2px 2px 6px rgb(100 100 100 / 50%);
+            }
+            .sav-menu .savlink a{
+                color:#459df5;
+                text-decoration:none;
+                transition:0.4s;
+            }
+            .sav-menu .savlink:not(.RPdisabled):hover a {
+                color: #039cff;
+                text-shadow: 0 0 #7cfb80;
+            }
+            avdivsinfo a,
+            avdivsinfo a:visited,
+            avdivsinfo a:link{
+                color: #000;
+                transition:0.2s;
+            }
+            avdivsinfo a:hover{
+                color: #850000; 
+            }
+            /* 相关页面按钮 */
+            .relatedPage.RPdisabled{
+                cursor:default;
+            }
+            .relatedPage.RPdisabled a{
+                cursor:default;
+                pointer-events:none;
+                text-decoration:line-through;
+                color:#333;
+            }
+
+            avdivsinfo{
+                text-indent: -2.5em;
+                line-height: normal;
+            }
+            avdivsinfo avdiv{
+                display:block;
+                margin-bottom: 5px;
+                text-shadow: 0 0 #d9d9d9;
+                transition: 0.2s;
+                padding-left: 2.5em;
+            }
+            avdivsinfo .avInfoTags,
+            avdivsinfo .avInfoSeries{
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            avdiverror{
+                display:block;
+                margin-top: 10px;
+                padding-left: 10px;
+            }
+            avdiverror avdiv{
+                display:block;
+                margin-bottom: 5px;
+                transition: 0.2s;
+            }
+            avdiv .avimg{
+                height: 400px;
+                max-width: 100%;
+                max-height: 500px;
+                cursor: pointer;
+                box-shadow: -2px -2px 4px rgb(230 230 230), 2px 2px 2px rgb(70 70 70 / 50%);
+                border-top: 1px solid #fff;
+                border-left: 1px solid #fff;
+                border-radius: 4px;
+                transform-origin: center 80%;
+                transition:0.2s;
+                transition-timing-function: ease-out;
+            }
+            /* .avimg-preview-button:hover + .avimg,
+            avdiv .avimg:hover{
+                scale:1.01;
+                box-shadow: -2px -2px 4px rgb(160 160 160), 4px 4px 4px rgb(70 70 70 / 60%);
+            } */
+            avdiv .imageBig{
+                max-height: 600px;
+                transform: scale(1.3);
+                border-radius: 10px;
+                border-top: 2px solid #fff;
+                border-left: 2px solid #fff;
+                box-shadow: -2px -2px 4px rgb(160 160 160), 4px 4px 4px rgb(70 70 70 / 60%);
+            }
+            avdiv .imageBig:hover{
+                box-shadow: -4px -4px 8px rgb(160 160 160), 6px 6px 8px rgb(70 70 70 / 60%);
+            }
+
+            savdiv.sav-id{
+                transition: 0.5s;
+            }
+            savdiv.sav-id,
+            savmagnet {
+                cursor: pointer;
+            }
+            u:has(savdiv){
+                text-decoration: none;
+            }
+            .yesJellyfin{
+                color:#459df5
+            }
+            .noJellyfin{
+                text-decoration:line-through;
+            }
+            avspan svg {
+                height: 14px;
+                position: relative;
+                top: 0.1em;
+                opacity:0.8;
+                transition:0.2s;
+                display: inline-block;
+                vertical-align: baseline;
+            }
+            avspan svg:hover {
+                opacity:1;
+            }
+            avdiv.sav-menu .avimg.savImgError{
+                height:200px;
+            }
+            /* 动画: 横线加载时的动画 */
+            @keyframes sav-loading-animation {
+                from{ transform: translate(0, 0); }
+                to{ transform: translate(50%, 0); }
+            }
+            .savLoadingContainer {
+                display:block;
+                overflow: hidden;
+                width: 100%;
+                transition:0.1s;
+                height: 3px;
+                margin-top: 5px;
+            }
+            .savLoading {
+                display: block;
+                font-size: 0;
+                height: 100%;
+                width: 200%;
+                position: relative;
+                transition:0.2s;
+                animation: sav-loading-animation 3s linear infinite;
+            }
+            .savLoading svg {
+                border: none;
+                height: 100%;
+                width: 50%;
+                position: absolute;
+            }
+            .savLoading svg:last-child {
+                left: -50%;
+            }
+            .stop1,
+            .stop3{
+                stop-color:#fff0;
+            }
+            .stop2{
+                stop-color:#6dc4ed;
+                transition: 1s;
+            }
+            .stop2.javbusloading{
+                stop-color:#71d99b;
+            }
+            .stop2.javdbloading{
+                stop-color:#cccc00;
+            }
+            .stop2.fc2loading{
+                stop-color:#F8A01C;
+            }
+            /* 预览视频 */
+            avdivimg{
+                position: relative;
+                display: block;
+                text-indent: initial;
+                user-select: none;
+
+            }
+            .avimg-preview-button{
+                width: 40px;
+                height: 40px;
+                border-radius: 40px;
+                background:#00e7ff00;
+                opacity: 0.8;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                z-index:1;
+                transition:0.4s;
+                animation: savOpenAnim2 0.15s;
+                
+            }
+            @keyframes huerotate{
+                0%{
+                    filter:hue-rotate(0deg);
+                }
+                100%{
+                    filter:hue-rotate(360deg);
+                }
+            }
+            .avimg-preview-button:hover{
+                opacity: 1;
+                background:#00e7ff;
+            }
+            .avimg-preview-button:after {
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'  viewBox='0 0 512 512'%3E%3Cpath d='M448 255c0-106-86-192-192-192S64 150 64 256s86 192 192 192 192-86 192-192z' fill=''  fill-opacity='0.8' stroke='none'/%3E%3Cpath fill='white' d='M216.32  334.44l114.45-69.14a10.89 10.89 0 000-18.6l-114.45-69.14a10.78 10.78 0 00-16.32 9.31v138.26a10.78 10.78 0 0016.32 9.31z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: 50%;
+                background-size: 48px 48px;
+                content: "";
+                display: block;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                /* border: 2px solid;
+                border-image:linear-gradient(45deg,gold,deeppink)1; */
+            }
+            .savCloseAnim2,
+            avdivimg:has(avdivVideo) .avimg-preview-button,
+            avdivimg:has(.imageBig) .avimg-preview-button{
+                animation: savCloseAnim2 0.15s;
+                animation-fill-mode: forwards;
+            }
+            avdivVideo{
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                animation: savOpenAnim2 0.15s;
+            }
+            avdivimg video{
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                background: #fff9;
+                backdrop-filter: blur(5px);
+                border-radius:4px;
+            }
+            .savVideoClose {
+                position: absolute;
+                right: 0;
+                top: 0;
+                padding: 7px 10px 7px 97%;
+                border-radius: 4px;
+                cursor: pointer;
+                transition:0.4s;
+            }
+            iframe + .savVideoClose{
+                color:#fff;
+            }
+            .savVideoClose:hover {
+                color:red;
+                background: #fff8;
+            }
+            avdivvideo iframe{
+                width:100%;
+                height:100%;
+                border: none;
+            }
+            @keyframes savOpenAnim2 {
+                0% {
+                    opacity: 0;
+                    transform:scale(0);
+                }
+                100% {
+                    opacity: 1;
+                    transform:scale(1);
+                }
+            }
+            @keyframes savCloseAnim2 {
+                0% {
+                    opacity: 1;
+                    transform:scale(1);
+                }
+                100% {
+                    opacity: 0;
+                    transform:scale(0);
+                }
+            }
+
+            /* 对其他网站的一些更改 */
+            .fc2-embed-video-player.opt_logo .fc2-video-player .fc2-video-metadata{
+                display:none !important;
+            }
+            .fc2-video-player-logo{
+                display:none !important;
+            }
+            .infoFirst{text-decoration:underline green;}.infoExistent{text-decoration:underline dotted #66ccff;}.infoNonExistent{text-decoration:underline dotted red;}</style><style type="text/css">.TnITTtw-fp-collapsed-button {
+    display: none;
+    position: fixed !important;
+    top: 16px !important;
+    right: 16px !important;
+}
+
+.TnITTtw-fp-collapsed-button:hover {
+    opacity: 1.0 !important;
+}
+
+.TnITTtw-mate-fp-bar {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, Ubuntu, sans-serif !important;
+    color: #000;
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 999;
+    background: rgb(255 255 255 / 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 16px;
+    border-radius: 11px;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 25%);
+    width: 320px;
+    line-height: initial;
+}
+
+@-moz-document url-prefix() {
+    .TnITTtw-mate-fp-bar {
+        background: rgb(255 255 255 / 1.0);
+    }
+}
+
+.TnITTtw-mate-fp-bar.TnITTtw-dark-mode {
+    background: rgb(44, 44, 43);
+}
+
+.TnITTtw-hide-fp-bar {
+    width: 12px;
+    height: 12px;
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/regular-close-tt.png) !important;
+    background-size: 12px 12px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    cursor: pointer;
+}
+
+.TnITTtw-hide-fp-bar:hover {
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/hover-close-tt.png) !important;
+}
+
+.TnITTtw-current-page-lang {
+    color: #6d6d72;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.TnITTtw-dark-mode .TnITTtw-current-page-lang {
+    color: #98989D;
+}
+
+.TnITTtw-fp-translate {
+    width: calc(100% - 73px) !important;
+    font-size: 14px !important;
+    text-transform: none !important;
+}
+
+.TnITTtw-fp-translate.TnITTtw-in-progress {
+    animation-name: funky-bg;
+    animation-duration: 10s;
+    animation-timing-function: ease-in;
+}
+
+.TnITTtw-fp-translate.TnITTtw-show-original {
+    width: calc(100% - 20px) !important;
+}
+
+@keyframes funky-bg {
+    from {
+        background-image: linear-gradient(145deg, #01EF92, #00D8FB),
+        linear-gradient(35deg, rgba(1, 239, 146, 0.25), rgba(0, 216, 251, 0.25)) !important;
+    }
+
+    to {
+        background-image: linear-gradient(90deg, #01EF92, #00D8FB),
+        linear-gradient(35deg, rgba(1, 239, 146, 0.25), rgba(0, 216, 251, 0.25)) !important;
+    }
+}
+
+.TnITTtw-change-language, .TnITTtw-stop-fp {
+    width: 38px;
+    height: 38px;
+    background-color: #EFEFF4;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 16px 16px;
+    border-radius: 11px;
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.TnITTtw-change-language {
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/globe-earth.png) !important;
+}
+
+.TnITTtw-dark-mode .TnITTtw-change-language {
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/globe-earth-dark.png) !important;
+}
+
+.TnITTtw-stop-fp {
+    display: none;
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/regular-stt-stop.png) !important;
+    background-size: 12px 12px;
+}
+
+.TnITTtw-dark-mode .TnITTtw-change-language, .TnITTtw-dark-mode .TnITTtw-stop-fp {
+    background-color: #525251 !important;
+}
+
+.TnITTtw-change-language:hover, .TnITTtw-stop-fp:hover {
+    background-color: #F6F6F6;
+}
+
+.TnITTtw-change-language:active, .TnITTtw-stop-fp:active {
+    background-color: #E9E9E9;
+}
+
+.TnITTtw-dark-mode .TnITTtw-change-language:hover,
+.TnITTtw-dark-mode .TnITTtw-stop-fp:hover,
+.TnITTtw-dark-mode .TnITTtw-change-language:active,
+.TnITTtw-dark-mode .TnITTtw-stop-fp:active {
+    background-color: #767675;
+}
+
+#TnITTtw-always-translate {
+}
+
+.TnITTtw-fp-options input {
+    padding: initial;
+    width: auto;
+    border: initial;
+    box-shadow: initial;
+    line-height: initial;
+    height: auto;
+    display: initial;
+    position: initial;
+    appearance: auto;
+    top: initial;
+    cursor: pointer;
+    margin: 0;
+}
+
+.TnITTtw-fp-options input[readonly="readonly"] {
+    opacity: 0.5;
+}
+
+#TnITTtw-always-translate + label,
+#TnITTtw-never-translate-lang + label,
+#TnITTtw-never-translate-site + label {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, Ubuntu, sans-serif !important;
+    display: inline-block;
+    font-weight: 400;
+    font-size: 14px;
+    margin-left: 4px;
+    color: #000;
+    cursor: pointer;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 296px;
+    vertical-align: top;
+    line-height: initial;
+    letter-spacing: initial;
+    text-transform: initial;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+}
+
+#TnITTtw-always-translate + label::before,
+#TnITTtw-never-translate-lang + label::before,
+#TnITTtw-never-translate-site + label::before,
+#TnITTtw-always-translate + label::after,
+#TnITTtw-never-translate-lang + label::after,
+#TnITTtw-never-translate-site + label::after  {
+    content: initial;
+} 
+
+.TnITTtw-always-translate-inner-label {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    max-width: 252px;
+    vertical-align: top;
+    display: inline-block;
+}
+
+.TnITTtw-dark-mode #TnITTtw-always-translate + label,
+.TnITTtw-dark-mode #TnITTtw-never-translate-lang + label,
+.TnITTtw-dark-mode #TnITTtw-never-translate-site + label {
+    color: #FFF;
+}
+
+#TnITTtw-always-translate + label.TnITTtw-not-pro {
+    opacity: 0.5;
+}
+
+#TnITTtw-always-translate + label .TnITTtw-pro-label {
+    position: relative;
+    background: #000;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #FFF;
+    padding: 2px 5px;
+    border-radius: 4px;
+    margin-left: 10px;
+    top: -1px;
+    user-select: none;
+    -webkit-user-select: none;
+    display: inline;
+    font-weight: 500;
+}
+
+.TnITTtw-dark-mode #TnITTtw-always-translate + label .TnITTtw-pro-label {
+    background: #FFF;
+    color: #000;
+}
+
+.TnITTtw-inline-original-tooltip {
+    display: none;
+    position: absolute;
+    margin: 0px;
+    border: none;
+    padding: 16px;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255 255 255 / 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 11px;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 25%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, Ubuntu, sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: normal;
+}
+
+.TnITTtw-dark-mode.TnITTtw-inline-original-tooltip {
+    background-color: rgb(0 0 0 / 0.915);
+    color: #FFF;
+}
+
+.TnITTtw-inline-original-tooltip .TnITTtw-close-original-tooltip {
+    width: 12px;
+    height: 12px;
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/regular-close-tt.png) !important;
+    background-size: 12px 12px;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    cursor: pointer;
+}
+
+.TnITTtw-inline-original-tooltip .TnITTtw-close-original-tooltip:hover {
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/hover-close-tt.png) !important;
+}
+
+.TnITTtw-inline-original-tooltip .TnITTtw-original-label {
+    margin: 0;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    color: #6d6d72;
+    margin-bottom: 10px;
+}
+
+.TnITTtw-inline-original-tooltip.TnITTtw-dark-mode .TnITTtw-original-label {
+    color: #98989D;
+}
+
+.TnITTtw-inline-original-tooltip .TnITTtw-text-layout {
+    display: inline-block;
+    margin: 0;
+    font-size: 16px;
+    color: #000;
+}
+
+.TnITTtw-inline-original-tooltip.TnITTtw-dark-mode .TnITTtw-text-layout {
+    color: #FFF;
+}
+
+.TnITTtw-highlighted-for-original {
+    color: #0F0F5F;
+    background-color: #F0F0A0;
+}
+
+/* Dropdown scrollbars */
+
+#selVisibleScroll-1, #selVisibleScroll-2, #selVisibleScroll-3 {
+    overflow: hidden;
+    height: 259px;
+    width: 100%;
+    position: relative;
+}
+
+#sel-scrollbar-1, #sel-scrollbar-2, #sel-scrollbar-3 {
+    position: absolute;
+    width: 4px;
+    height: 259px;
+    left: 225px;
+}
+
+#sel-track-1, #sel-track-2, #sel-track-3 {
+    position: absolute;
+    top: 1px;
+    width: 4px;
+    height: calc(100% - 6px);
+}
+
+#sel-dragBar-1, #sel-dragBar-2, #sel-dragBar-3 {
+    position: absolute;
+    top: 1px;
+    width: 4px;
+    background: rgba(43, 43, 43, 0.5);
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.dark-mode #sel-dragBar-1, .dark-mode #sel-dragBar-2, .dark-mode #sel-dragBar-3 {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+#sel-dragBar-1:hover, #sel-dragBar-2:hover, #sel-dragBar-3:hover, 
+#sel-dragBar-1:active, #sel-dragBar-2:active, #sel-dragBar-3:active {
+    background: rgba(43, 43, 43, 0.675);
+}
+
+.dark-mode #sel-dragBar-1:hover,
+.dark-mode #sel-dragBar-2:hover,
+.dark-mode #sel-dragBar-3:hover,
+.dark-mode #sel-dragBar-1:active,
+.dark-mode #sel-dragBar-2:active,
+.dark-mode #sel-dragBar-3:active {
+    background: rgba(255, 255, 255, 0.675);
+}
+
+#sel-scrollbar-1, #sel-track-1, #sel-dragBar-1, 
+#sel-scrollbar-2, #sel-track-2, #sel-dragBar-2,
+#sel-scrollbar-3, #sel-track-3, #sel-dragBar-3 {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Spinner for when it's translating a page */
+
+.TnITTtw-cta-button-layout {
+    position: relative;
+    display: inline;
+}
+
+.TnITTtw-spinner {
+    display: none;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+}
+  
+  @media screen and (max-width: 800px) {
+    .TnITTtw-spinner {
+      top: 28px;
+    }
+  }
+
+  .TnITTtw-spinner.in-text {
+    display: block;
+    background: transparent;
+    position: initial;
+  }
+
+  .TnITTtw-spinner.left {
+    text-align: left;
+  }
+  
+  .TnITTtw-spinner > div {
+    width: 12px;
+    height: 12px;
+    background-color: rgb(0, 71, 46);
+  
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  }
+
+  .TnITTtw-spinner.in-text > div {
+    background-color: #000;
+  }
+  
+  .TnITTtw-spinner .TnITTtw-bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+  }
+  
+  .TnITTtw-spinner .TnITTtw-bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+  }
+  
+  @-webkit-keyframes sk-bouncedelay {
+    0%, 80%, 100% { -webkit-transform: scale(0) }
+    40% { -webkit-transform: scale(1.0) }
+  }
+  
+  @keyframes sk-bouncedelay {
+    0%, 80%, 100% { 
+      -webkit-transform: scale(0);
+      transform: scale(0);
+    } 40% { 
+      -webkit-transform: scale(1.0);
+      transform: scale(1.0);
+    }
+  }</style><style type="text/css">/*
+ * contextMenu.js v 1.4.0
+ * Author: Sudhanshu Yadav
+ * s-yadav.github.com
+ * Copyright (c) 2013 Sudhanshu Yadav.
+ * Dual licensed under the MIT and GPL licenses
+**/
+
+.iw-contextMenu {
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.10) !important;
+    border: 1px solid #c8c7cc !important;
+    border-radius: 11px !important;
+    display: none;
+    z-index: 1000000132;
+    max-width: 300px !important;
+    width: auto !important;
+}
+
+.dark-mode .iw-contextMenu,
+.TnITTtw-dark-mode.iw-contextMenu,
+.TnITTtw-dark-mode .iw-contextMenu {
+    border-color: #747473 !important;
+}
+
+.iw-cm-menu {
+    background: #fff !important;
+    color: #000 !important;
+    margin: 0px !important;
+    padding: 0px !important;
+    overflow: visible !important;
+}
+
+.dark-mode .iw-cm-menu,
+.TnITTtw-dark-mode.iw-cm-menu,
+.TnITTtw-dark-mode .iw-cm-menu {
+    background: #525251 !important;
+    color: #FFF !important;
+}
+
+.iw-curMenu {
+}
+
+.iw-cm-menu li {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, Ubuntu, sans-serif !important;
+    list-style: none !important;
+    padding: 10px !important;
+    padding-right: 20px !important;
+    border-bottom: 1px solid #c8c7cc !important;
+    font-weight: 400 !important;
+    cursor: pointer !important;
+    position: relative !important;
+    font-size: 14px !important;
+    margin: 0 !important;
+    line-height: inherit !important;
+    border-radius: 0 !important;
+    display: block !important;
+}
+
+.dark-mode .iw-cm-menu li, .TnITTtw-dark-mode .iw-cm-menu li {
+    border-bottom-color: #747473 !important;
+}
+
+.iw-cm-menu li:first-child {
+    border-top-left-radius: 11px !important;
+    border-top-right-radius: 11px !important;
+}
+
+.iw-cm-menu li:last-child {
+    border-bottom-left-radius: 11px !important;
+    border-bottom-right-radius: 11px !important;
+    border-bottom: none !important;
+}
+
+.iw-mOverlay {
+    position: absolute !important;
+    width: 100% !important;
+    height: 100% !important;
+    top: 0px !important;
+    left: 0px !important;
+    background: #FFF !important;
+    opacity: .5 !important;
+}
+
+.iw-contextMenu li.iw-mDisable {
+    opacity: 0.3 !important;
+    cursor: default !important;
+}
+
+.iw-mSelected {
+    background-color: #F6F6F6 !important;
+}
+
+.dark-mode .iw-mSelected, .TnITTtw-dark-mode .iw-mSelected {
+    background-color: #676766 !important;
+}
+
+.iw-cm-arrow-right {
+    width: 0 !important;
+    height: 0 !important;
+    border-top: 5px solid transparent !important;
+    border-bottom: 5px solid transparent !important;
+    border-left: 5px solid #000 !important;
+    position: absolute !important;
+    right: 5px !important;
+    top: 50% !important;
+    margin-top: -5px !important;
+}
+
+.dark-mode .iw-cm-arrow-right, .TnITTtw-dark-mode .iw-cm-arrow-right {
+    border-left-color: #FFF !important;
+}
+
+.iw-mSelected > .iw-cm-arrow-right {
+}
+
+/*context menu css end */</style><style type="text/css">.ui_selector, .TnITTtw-ui_selector {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, Ubuntu, sans-serif;
+    display: inline-block;
+}
+
+.ui_selector .select, .TnITTtw-ui_selector .TnITTtw-select {
+    color: #000;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid rgba(200, 199, 204, 0.5);
+    padding: 10px 15px;
+    width: 201px;
+    -webkit-user-select: none;
+    cursor: pointer;
+    border-radius: 11px;
+    display: inline-block;
+    background-image: -webkit-linear-gradient(top, #FAFAFA, #F6F6F6);
+    background-image: -moz-linear-gradient(top, #FAFAFA, #F6F6F6);
+    background-size: auto 48px;
+    background-position: 0px -11px;
+    box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.10);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.dark-mode .ui_selector .select, 
+.TnITTtw-dark-mode .TnITTtw-ui_selector .TnITTtw-select {
+    background-image: -webkit-linear-gradient(top, #4A4A49, #40403F);
+    background-image: -moz-linear-gradient(top, #4A4A49, #40403F);
+    color: #FFF;
+    border-color: #747473;
+}
+
+.ui_selector .select:hover,
+.TnITTtw-ui_selector .TnITTtw-select:hover {
+    color: #424242;
+    background-image: -webkit-linear-gradient(top, #FAFAFA, #FAFAFA);
+    background-image: -moz-linear-gradient(top, #FAFAFA, #FAFAFA);
+}
+
+.ui_selector .select:active,
+.TnITTtw-ui_selector .TnITTtw-select:active {
+    color: #6d6d72;
+    background-image: -webkit-linear-gradient(top, #F6F6F6, #F6F6F6);
+    background-image: -moz-linear-gradient(top, #F6F6F6, #F6F6F6);
+}
+
+.dark-mode .ui_selector .select:hover,
+.dark-mode .ui_selector .select:active,
+.TnITTtw-dark-mode .TnITTtw-ui_selector .TnITTtw-select:hover,
+.TnITTtw-dark-mode .TnITTtw-ui_selector .TnITTtw-select:active {
+    background-image: -webkit-linear-gradient(top, #4A4A49, #4A4A49);
+    background-image: -moz-linear-gradient(top, #4A4A49, #4A4A49);
+    color: #FFF;
+    border-color: #747473;
+}
+
+.ui_selector .select .detected-ico,
+.TnITTtw-ui_selector .TnITTtw-select .TnITTtw-detected-ico {
+    display: inline-block;
+}
+
+.ui_selector .active, .ui_selector .active:hover, .ui_selector .active:active,
+.TnITTtw-ui_selector .TnITTtw-active, .TnITTtw-ui_selector .TnITTtw-active:hover, .TnITTtw-ui_selector .TnITTtw-active:active {
+    box-shadow: 0 -1px 15px -10px rgba(0, 0, 0, 0.85) !important;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background: #F3F3F3;
+}
+
+.sliding-text,
+.TnITTtw-sliding-text {
+    position: relative;
+}
+
+.ui_selector .options,
+.TnITTtw-ui_selector .TnITTtw-options {
+    margin-left: 0px;
+    margin-top: -4px;
+    background: #fff;
+    border: 1px solid rgba(200, 199, 204, 0.5);
+    width: 231px;
+    overflow: hidden;
+    max-height: 313px;
+    position: absolute;
+    font-size: 12px;
+    box-shadow: 0 2px 10px rgb(0 0 0 / 25%);
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    display: none;
+}
+
+.ui_selector .options.standalone,
+.TnITTtw-ui_selector .TnITTtw-options.TnITTtw-standalone {
+    border-radius: 11px;
+    margin-top: 16px;
+}
+
+/* for now, it can only be on the top */
+.ui_selector .options-arrow,
+.TnITTtw-ui_selector .TnITTtw-options-arrow {
+    display: none;
+    position: absolute;
+    width: 32px !important;
+    height: 18px !important;
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/tt-dropdown-arrow.png);
+    background-size: 32px 18px;
+    transform: rotate(180deg);
+    margin-top: -1px;
+}
+
+.dark-mode .ui_selector .options-arrow,
+.TnITTtw-dark-mode .TnITTtw-ui_selector .TnITTtw-options-arrow {
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/tt-dropdown-arrow-dark.png);
+}
+
+.dark-mode .ui_selector .options,
+.TnITTtw-dark-mode .TnITTtw-ui_selector .TnITTtw-options {
+    background: #525251;
+}
+
+.ui_selector .options ul,
+.TnITTtw-ui_selector .TnITTtw-options ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 232px;
+}
+
+.ui_selector .options ul li,
+.TnITTtw-ui_selector .TnITTtw-options ul li {
+    padding: 10px 0px;
+    -webkit-user-select: none;
+    text-align: center;
+    font-size: 17px;
+    -webkit-transition: all 600ms cubic-bezier(0.23, 1, 0.32, 1);
+    margin: 0 10px;
+    border-radius: 6px;
+    position: relative;
+}
+
+.dark-mode .options ul li,
+.TnITTtw-dark-mode .TnITTtw-options ul li {
+    color: #fff;
+}
+
+.ui_selector .options ul li:last-child,
+.TnITTtw-ui_selector .TnITTtw-options ul li:last-child {
+    margin-bottom: 16px;
+}
+
+.ui_selector .options ul li.option:first-child,
+.ui_selector .options ul li.option_selected:first-child,
+.TnITTtw-ui_selector .TnITTtw-options ul li.TnITTtw-option:first-child,
+.TnITTtw-ui_selector .TnITTtw-options ul li.TnITTtw-option_selected:first-child {
+    margin-top: 16px;
+}
+
+.ui_selector .options ul li.whenHover,
+.TnITTtw-ui_selector .TnITTtw-options ul li.TnITTtw-whenHover {
+    cursor: pointer;
+    background: #f3f3f3;
+    text-align: center;
+}
+
+.dark-mode .ui_selector .options ul li.whenHover,
+.TnITTtw-dark-mode .TnITTtw-ui_selector .TnITTtw-options ul li.TnITTtw-whenHover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.ui_selector .options ul li.option_selected,
+.TnITTtw-ui_selector .TnITTtw-options ul li.TnITTtw-option_selected {
+    cursor: pointer;
+    background-image: linear-gradient(145deg, #01EF92, #00D8FB),
+    linear-gradient(35deg, rgba(1, 239, 146, 0.25), rgba(0, 216, 251, 0.25)) !important;
+    color: #fff;
+    font-weight: 600;
+}
+
+.ui_selector .options ul .group,
+.ui_selector .options ul .group:hover,
+.ui_selector .options ul .group.whenHover,
+.TnITTtw-ui_selector .TnITTtw-options ul .TnITTtw-group,
+.TnITTtw-ui_selector .TnITTtw-options ul .TnITTtw-group:hover,
+.TnITTtw-ui_selector .TnITTtw-options ul .TnITTtw-group.whenHover {
+    padding: 16px 10px;
+    color: #8e8e93;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    text-align: center;
+    cursor: default;
+    background: #FFF;
+}
+
+.dark-mode .ui_selector .options ul .group,
+.dark-mode .ui_selector .options ul .group:hover,
+.dark-mode .ui_selector .options ul .group.whenHover,
+.TnITTtw-dark-mode .TnITTtw-ui_selector .TnITTtw-options ul .TnITTtw-group,
+.TnITTtw-dark-mode .TnITTtw-ui_selector .TnITTtw-options ul .TnITTtw-group:hover,
+.TnITTtw-dark-mode .TnITTtw-ui_selector .TnITTtw-options ul .TnITTtw-group.TnITTtw-whenHover {
+    color: #98989D;
+    background: #525251;
+}
+
+.group-element,
+.TnITTtw-group-element {
+    width: 153px;
+}
+
+.options .dd-search,
+.TnITTtw-options .TnITTtw-dd-search {
+    border-bottom: 1px solid rgba(200, 199, 204, 0.5);
+}
+
+.dark-mode .options .dd-search,
+.TnITTtw-dark-mode .TnITTtw-options .TnITTtw-dd-search {
+    border-bottom-color: #747473;
+}
+
+.dd-search .dd-input,
+.TnITTtw-dd-search .TnITTtw-dd-input {
+    padding: 16px;
+    padding-left: calc(16px * 3);
+    width: 168px;
+    border: none;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica, Arial, Ubuntu, sans-serif;
+    text-align: left;
+    color: #000;
+    font-size: 17px;
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/searchfield-icon.png);
+    background-position: 16px;
+    background-size: 16px;
+    background-repeat: no-repeat;
+    margin: 0;
+    height: auto;
+}
+
+.dark-mode .dd-search .dd-input,
+.TnITTtw-dark-mode .TnITTtw-dd-search .TnITTtw-dd-input {
+    color: #FFF;
+    background-color: #525251;
+}
+
+.dd-search .dd-input:focus,
+.TnITTtw-dd-search .TnITTtw-dd-input:focus {
+    -webkit-transition: all 275ms cubic-bezier(0.23, 1, 0.32, 1);
+    outline: none;
+    text-align: left;
+}
+
+.dd-input::-webkit-input-placeholder,
+.TnITTtw-dd-input::-webkit-input-placeholder {
+    color: #8e8e93;
+}
+
+.search-failed-plaque,
+.TnITTtw-search-failed-plaque {
+    text-align: center;
+    padding: 20px;
+    color: #8e8e93;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.dark-mode .search-failed-plaque,
+.TnITTtw-dark-mode .TnITTtw-search-failed-plaque {
+    color: #98989D;
+}
+
+.rm-recent,
+.TnITTtw-rm-recent {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/regular-lang-remove.png);
+    background-size: 10px 10px;
+    top: 15px;
+    right: 10px;
+}
+
+.rm-recent:hover,
+.TnITTtw-rm-recent:hover {
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/hover-lang-remove.png);
+}
+
+.rm-recent:active,
+.TnITTtw-rm-recent:active {
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/down-lang-remove.png);
+}
+
+.option_selected .rm-recent,
+.TnITTtw-option_selected .TnITTtw-rm-recent {
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/down-active-lang-remove.png);
+}
+
+.option_selected .rm-recent:hover,
+.TnITTtw-option_selected .TnITTtw-rm-recent:hover {
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/hover-active-lang-remove.png);
+}
+
+.option_selected .rm-recent:active,
+.TnITTtw-option_selected .TnITTtw-rm-recent:active {
+    background-image: url(chrome-extension://ihmgiclibbndffejedjimfjmfoabpcke/res/images/ui/down-active-lang-remove.png);
+}
+
+.TnITTtw-hidden {
+    display: none;
+}</style><style>
+            .flipX video::-webkit-media-text-track-display {
+                transform: matrix(-1, 0, 0, 1, 0, 0) !important;
+            }
+            .flipXY video::-webkit-media-text-track-display {
+                transform: matrix(-1, 0, 0, -1, 0, 0) !important;
+            }
+            .flipXYX video::-webkit-media-text-track-display {
+                transform: matrix(1, 0, 0, -1, 0, 0) !important;
+            }</style><style>
+            @keyframes blinkWarning {
+                0% { color: red; }
+                100% { color: white; }
+            }
+            @-webkit-keyframes blinkWarning {
+                0% { color: red; }
+                100% { color: white; }
+            }
+            .blinkWarning {
+                -webkit-animation: blinkWarning 1s linear infinite;
+                -moz-animation: blinkWarning 1s linear infinite;
+                animation: blinkWarning 1s linear infinite;
+            }</style><style type="text/css">@-webkit-keyframes load4 {
+    0%,
+    100% {
+        box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
+    }
+    12.5% {
+        box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+    }
+    25% {
+        box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+    }
+    37.5% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    }
+    50% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    }
+    62.5% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+    }
+    75% {
+        box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+    }
+    87.5% {
+        box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+    }
+}
+
+@keyframes load4 {
+    0%,
+    100% {
+        box-shadow: 0 -3em 0 0.2em, 2em -2em 0 0em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 0;
+    }
+    12.5% {
+        box-shadow: 0 -3em 0 0, 2em -2em 0 0.2em, 3em 0 0 0, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+    }
+    25% {
+        box-shadow: 0 -3em 0 -0.5em, 2em -2em 0 0, 3em 0 0 0.2em, 2em 2em 0 0, 0 3em 0 -1em, -2em 2em 0 -1em, -3em 0 0 -1em, -2em -2em 0 -1em;
+    }
+    37.5% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 0, 2em 2em 0 0.2em, 0 3em 0 0em, -2em 2em 0 -1em, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    }
+    50% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 0em, 0 3em 0 0.2em, -2em 2em 0 0, -3em 0em 0 -1em, -2em -2em 0 -1em;
+    }
+    62.5% {
+        box-shadow: 0 -3em 0 -1em, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 0, -2em 2em 0 0.2em, -3em 0 0 0, -2em -2em 0 -1em;
+    }
+    75% {
+        box-shadow: 0em -3em 0 -1em, 2em -2em 0 -1em, 3em 0em 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0.2em, -2em -2em 0 0;
+    }
+    87.5% {
+        box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+    }
+}</style><style type="text/css">/* This is not a zero-length file! */</style><style data-id="immersive-translate-input-injected-css">.immersive-translate-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 2147483647;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.immersive-translate-input-loading {
+  --loading-color: #f78fb6;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: block;
+  margin: 12px auto;
+  position: relative;
+  color: white;
+  left: -100px;
+  box-sizing: border-box;
+  animation: immersiveTranslateShadowRolling 1.5s linear infinite;
+}
+
+@keyframes immersiveTranslateShadowRolling {
+  0% {
+    box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  12% {
+    box-shadow: 100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  25% {
+    box-shadow: 110px 0 var(--loading-color), 100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  36% {
+    box-shadow: 120px 0 var(--loading-color), 110px 0 var(--loading-color), 100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  50% {
+    box-shadow: 130px 0 var(--loading-color), 120px 0 var(--loading-color), 110px 0 var(--loading-color), 100px 0 var(--loading-color);
+  }
+
+  62% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color), 120px 0 var(--loading-color), 110px 0 var(--loading-color);
+  }
+
+  75% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color), 120px 0 var(--loading-color);
+  }
+
+  87% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color);
+  }
+
+  100% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+  }
+}
+
+
+.immersive-translate-search-recomend {
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  position: relative;
+  font-size: 16px;
+}
+.immersive-translate-search-enhancement-en-title {
+  color: #4d5156;
+}
+/* dark */
+@media (prefers-color-scheme: dark) {
+  .immersive-translate-search-recomend {
+    border: 1px solid #3c4043;
+  }
+  .immersive-translate-close-action svg {
+    fill: #bdc1c6;
+  }
+
+.immersive-translate-search-enhancement-en-title {
+  color: #bdc1c6;
+}
+}
+
+
+.immersive-translate-search-settings {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  cursor: pointer;
+}
+
+.immersive-translate-search-recomend::before {
+  /* content: " "; */
+  /* width: 20px; */
+  /* height: 20px; */
+  /* top: 16px; */
+  /* position: absolute; */
+  /* background: center / contain url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAxlBMVEUAAADpTInqTIjpSofnSIfqS4nfS4XqS4nqTIjsTYnrTInqTIroS4jvQIDqTIn////+/v7rSYjpTIn8/v7uaZzrTIr9/f3wfansWJL88/b85e73qc39+/v3xNnylrvrVI/98fb62Obva5/8+fr76vH4y9zpSIj74e353Oj1ocTzm77xhK/veKbtYpjsXJTqU47oTInxjrXyh7L99fj40eH2ttH1udD3sc31ssz1rMnykLXucqPtbqD85e/1xdn2u9DzqcXrUY6FaJb8AAAADnRSTlMA34BgIM8Q37/fz7+/EGOHcVQAAAGhSURBVDjLhZPncuowEEZFTW7bXVU7xsYYTO/p7bb3f6lICIOYJOT4h7/VnFmvrBFjrF3/CR/SajBHswafctG0Qg3O8O0Xa8BZ6uw7eLjqr30SofCDVSkemMinfL1ecy20r5ygR5zz3ArcAqJExPTPKhDENEmS30Q9+yo4lEQkqVTiIEAHCT10xWERRdH0Bq0aCOPZNDV3s0xaYce1lHEoDHU8wEh3qRJypNcTAeKUIjgKMeGLDoRCLVLTVf+Ownj8Kk6H9HM6QXPgYjQSB0F00EJEu10ILQrs/QeP77BSSr0MzLOyuJJQbnUoOOIUI/A8EeJk9E4YUHUWiRyTVKGgQUB8/3e/NpdGlfI+FMQyWsCBWyz4A/ZyHXyiiz0Ne5aGZssoxRmcChw8/EFKQ5JwwkUo3FRT5yXS7q+Y/rHDZmFktzpGMvO+5QofA4FPpEmGw+EWRCFvnaof7Zhe8NuYSLR0xErKLThUSs8gnODh87ssy6438yzbLzxl012HS19vfCf3CNhnbWOL1eEsDda+gDPUvri8tSZzNFrwIZf1NmNvqC1I/t8j7nYAAAAASUVORK5CYII='); */
+}
+
+.immersive-translate-search-title {}
+
+.immersive-translate-search-title-wrapper {}
+
+.immersive-translate-search-time {
+  font-size: 12px;
+  margin: 4px 0 24px;
+  color: #70757a;
+}
+
+.immersive-translate-expand-items {
+  display: none;
+}
+
+.immersive-translate-search-more {
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.immersive-translate-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  font-size:15px;
+}
+
+.immersive-translate-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+  font-family: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu",
+    "Cantarell", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.immersive-translate-modal-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: hsl(205, 20%, 32%);
+}
+
+.immersive-translate-modal-body {
+  color: hsl(205, 20%, 32%)
+}
+
+.immersive-translate-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.immersive-translate-close:hover,
+.immersive-translate-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.immersive-translate-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.immersive-translate-btn {
+  width: fit-content;
+  color: #fff;
+  background-color: #ea4c89;
+  border: none;
+  font-size: 14px;
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.immersive-translate-btn:hover {
+  background-color: #f082ac;
+}
+.immersive-translate-cancel-btn {
+  /* gray color */
+  background-color: rgb(89, 107, 120);
+}
+
+
+.immersive-translate-cancel-btn:hover {
+  background-color: hsl(205, 20%, 32%);
+}
+
+
+.immersive-translate-btn svg {
+  margin-right: 5px;
+}
+
+.immersive-translate-link {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  text-decoration: none;
+  color: #007bff;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, .1);
+}
+
+.immersive-translate-primary-link {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  text-decoration: none;
+  color: #ea4c89;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, .1);
+}
+
+.immersive-translate-modal input[type="radio"] {
+  margin: 0 6px;
+  cursor: pointer;
+}
+
+.immersive-translate-modal label {
+  cursor: pointer;
+}
+
+.immersive-translate-close-action {
+  position: absolute;
+  top: 2px;
+  right: 0px;
+  cursor: pointer;
+}
+</style></head><body dir="ltr" data-md-color-scheme="" data-md-color-primary="black" data-md-color-accent="">·
+<meta property="og:image:height" content="640">
+<!-- Twitter meta tags -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@helloflask">
+<meta name="twitter:creator" content="@helloflask">
+<meta name="twitter:title" content="Flask 入门教程 - 第 2 章：Hello, Flask!">
+<meta name="twitter:description" content="使用 Python 和 Flask 开发你的第一个 Web 程序">
+<meta name="twitter:image" content="https://tutorial.helloflask.com/_assets/favicon.png">
+
+  
+  
+  
+    
+    
+    
+    
+    
+    
+  
+    
+    <script>function __prefix(e){return new URL("..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="https://tutorial.helloflask.com/hello/#2-hello-flask" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner md-announce">
+          <div class="md-banner__inner md-announce__inner md-grid md-typeset">
+            
+📌《Flask 入门教程》第 3 版已于 2022 年 7 月 16 日发布，新版本基于 Flask 2.1.x 版本和 Python 3.6+ 版本改写。欢迎关注 <a href="https://twitter.com/greylihui" target="_blank" style="color: #526cfe">Twitter</a> 或<a href="https://greyli.com/files/qrcode_gh.jpg" target="_blank" style="color: #526cfe" class="hoverZoomLink">微信公众号</a>获取更多动态。
+
+          </div>
+        </aside>
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header" data-md-state="shadow">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="https://tutorial.helloflask.com/" title="Flask 入门教程" class="md-header__button md-logo" aria-label="Flask 入门教程" data-md-component="logo">
+      
+  <img src="./index_files/favicon.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"></path></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title" data-md-state="active">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Flask 入门教程
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              第 2 章：Hello, Flask!
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required="">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"></path></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap">
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">键入以开始搜索</div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/helloflask/flask-tutorial/" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+  </div>
+  <div class="md-source__repository" data-md-state="done">
+    helloflask/flask-tutorial
+  <ul class="md-source__facts"><li class="md-source__fact md-source__fact--stars">734</li><li class="md-source__fact md-source__fact--forks">135</li></ul></div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" style="">
+                <div class="md-sidebar__scrollwrap" style="">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://tutorial.helloflask.com/" title="Flask 入门教程" class="md-nav__button md-logo" aria-label="Flask 入门教程" data-md-component="logo">
+      
+  <img src="./index_files/favicon.png" alt="logo">
+
+    </a>
+    Flask 入门教程
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/helloflask/flask-tutorial/" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+  </div>
+  <div class="md-source__repository" data-md-state="done">
+    helloflask/flask-tutorial
+  <ul class="md-source__facts"><li class="md-source__fact md-source__fact--stars">734</li><li class="md-source__fact md-source__fact--forks">135</li></ul></div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list">
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/" class="md-nav__link">
+        简介
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/cover/" class="md-nav__link">
+        封面
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/preface/" class="md-nav__link">
+        前言
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/ready/" class="md-nav__link">
+        第 1 章：准备工作
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          第 2 章：Hello, Flask!
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="https://tutorial.helloflask.com/hello/" class="md-nav__link md-nav__link--active">
+        第 2 章：Hello, Flask!
+      </a>
+      
+        
+
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_1" class="md-nav__link" data-md-state="blur">
+    主页
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_2" class="md-nav__link" data-md-state="blur">
+    解剖时间
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_3" class="md-nav__link" data-md-state="blur">
+    程序发现机制
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_4" class="md-nav__link" data-md-state="blur">
+    管理环境变量
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_5" class="md-nav__link" data-md-state="blur">
+    实验时间
+  </a>
+  
+    <nav class="md-nav" aria-label="实验时间">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_6" class="md-nav__link" data-md-state="blur">
+    修改视图函数返回值
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#url" class="md-nav__link md-nav__link--active" data-md-state="blur">
+    修改 URL 规则
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_7" class="md-nav__link">
+    修改视图函数名？
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_8" class="md-nav__link">
+    本章小结
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_9" class="md-nav__link">
+    进阶提示
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/template/" class="md-nav__link">
+        第 3 章：模板
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/static/" class="md-nav__link">
+        第 4 章：静态文件
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/database/" class="md-nav__link">
+        第 5 章：数据库
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/template2/" class="md-nav__link">
+        第 6 章：模板优化
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/form/" class="md-nav__link">
+        第 7 章：表单
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/login/" class="md-nav__link">
+        第 8 章：用户认证
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/test/" class="md-nav__link">
+        第 9 章：测试
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/organize/" class="md-nav__link">
+        第 10 章：组织你的代码
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/deploy/" class="md-nav__link">
+        第 11 章：部署上线
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/challenge/" class="md-nav__link">
+        小挑战
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://tutorial.helloflask.com/postscript/" class="md-nav__link">
+        后记
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://helloflask.com/book/3" class="md-nav__link">
+        教程主页↗
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/helloflask/flask-tutorial" class="md-nav__link">
+        书稿源码↗
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/helloflask/watchlist" class="md-nav__link">
+        示例程序源码↗
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://codekitchen.community/" class="md-nav__link">
+        代码厨房社区↗
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" style="top: 48px;">
+                <div class="md-sidebar__scrollwrap" style="height: 890px;">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc">
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_1" class="md-nav__link" data-md-state="blur">
+    主页
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_2" class="md-nav__link" data-md-state="blur">
+    解剖时间
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_3" class="md-nav__link" data-md-state="blur">
+    程序发现机制
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_4" class="md-nav__link" data-md-state="blur">
+    管理环境变量
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_5" class="md-nav__link" data-md-state="blur">
+    实验时间
+  </a>
+  
+    <nav class="md-nav" aria-label="实验时间">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_6" class="md-nav__link" data-md-state="blur">
+    修改视图函数返回值
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#url" class="md-nav__link md-nav__link--active" data-md-state="blur">
+    修改 URL 规则
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_7" class="md-nav__link">
+    修改视图函数名？
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_8" class="md-nav__link">
+    本章小结
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="https://tutorial.helloflask.com/hello/#_9" class="md-nav__link">
+    进阶提示
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/helloflask/flask-tutorial/edit/master/docs/hello.md" title="编辑此页" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"></path></svg>
+                  </a>
+                
+                
+                <h1 id="2-hello-flask">第 2 章：Hello, Flask!<a class="headerlink" href="https://tutorial.helloflask.com/hello/#2-hello-flask" title="Permanent link">¶</a></h1>
+<p>追溯到最初，Flask 诞生于 Armin Ronacher 在 2010 年愚人节开的一个玩笑。后来，它逐渐发展成为一个成熟的 Python Web 框架，越来越受到开发者的喜爱。目前它在 GitHub 上是 Star 数量最多的 Python Web 框架，没有之一。根据 2018、2019、2020、2021 连续四年的《<a href="https://lp.jetbrains.com/python-developers-survey-2021">Python 开发者调查报告</a>》统计数据，它也是目前最流行的 Python Web 框架。</p>
+<p>Flask 是典型的微框架，作为 Web 框架来说，它仅保留了核心功能：<strong>请求响应处理</strong>和<strong>模板渲染</strong>。这两类功能分别由 Werkzeug（WSGI 工具库）完成和 Jinja（模板渲染库）完成，因为 Flask 包装了这两个依赖，我们暂时不用深入了解它们。</p>
+<h2 id="_1">主页<a class="headerlink" href="https://tutorial.helloflask.com/hello/#_1" title="Permanent link">¶</a></h2>
+<p>这一章的主要任务就是为我们的程序编写一个简单的主页。主页的 URL 一般就是根地址，即 <code>/</code>。当用户访问根地址的时候，我们需要返回一行欢迎文字。这个任务只需要下面几行代码就可以完成：</p>
+<p><em>app.py：程序主页</em></p>
+<div class="highlight"><pre id="__code_0"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_0 &gt; code"></button><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">'Welcome to My Watchlist!'</span>
+</code></pre></div>
+<p>按照惯例，我们把程序保存为 app.py，确保当前目录是项目的根目录，并且激活了虚拟环境，然后在命令行窗口执行 <code>flask run</code> 命令启动程序（按下 Control + C 可以退出）：</p>
+<div class="highlight"><pre id="__code_1"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_1 &gt; code"></button><code><span class="o">(</span>env<span class="o">)</span> $ flask run
+* Serving Flask app <span class="s2">"app.py"</span>
+* Environment: production
+  WARNING: Do not use the development server <span class="k">in</span> a production environment.
+  Use a production WSGI server instead.
+* Debug mode: off
+* Running on http://127.0.0.1:5000/ <span class="o">(</span>Press CTRL+C to quit<span class="o">)</span>
+</code></pre></div>
+<p>现在打开浏览器，输入 <a href="http://localhost:5000/">http://localhost:5000</a> 并按下 Enter 即可访问我们的程序主页，并看到我们在程序里返回的问候语，如下图所示：</p>
+<p><img alt="主页" src="./index_files/2-1.png"></p>
+<p>执行 <code>flask run</code> 命令时，Flask 会使用内置的开发服务器来运行程序。这个服务器默认监听本地机的 5000 端口，也就是说，我们可以通过在地址栏输入 <a href="http://127.0.0.1:5000/">http://127.0.0.1:5000</a> 或是 <a href="http://localhost:5000/">http://localhost:5000</a> 访问程序。</p>
+<blockquote>
+<p><strong>注意</strong> 内置的开发服务器只能用于开发时使用，部署上线的时候要换用性能更好的生产服务器，我们会在最后一章学习。</p>
+</blockquote>
+<h2 id="_2">解剖时间<a class="headerlink" href="https://tutorial.helloflask.com/hello/#_2" title="Permanent link">¶</a></h2>
+<p>下面我们来分解这个 Flask 程序，了解它的基本构成。</p>
+<p>首先我们从 <code>flask</code> 包导入 <code>Flask</code> 类，通过实例化这个类，创建一个程序对象 <code>app</code>：</p>
+<div class="highlight"><pre id="__code_2"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_2 &gt; code"></button><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</code></pre></div>
+<p>接下来，我们要注册一个处理函数，这个函数是处理某个请求的处理函数，Flask 官方把它叫做视图函数（view funciton），你可以理解为“<strong>请求处理函数</strong>”。</p>
+<p>所谓的“注册”，就是给这个函数戴上一个装饰器帽子。我们使用 <code>app.route()</code> 装饰器来为这个函数绑定对应的 URL，当用户在浏览器访问这个 URL 的时候，就会触发这个函数，获取返回值，并把返回值显示到浏览器窗口：</p>
+<div class="highlight"><pre id="__code_3"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_3 &gt; code"></button><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">'Welcome to My Watchlist!'</span>
+</code></pre></div>
+<blockquote>
+<p><strong>提示</strong> 为了便于理解，你可以把 Web 程序看作是一堆这样的视图函数的集合：编写不同的函数处理对应 URL 的请求。</p>
+</blockquote>
+<p>填入 <code>app.route()</code> 装饰器的第一个参数是 URL 规则字符串，这里的 <code>/</code>指的是根地址。</p>
+<p>我们只需要写出相对地址，主机地址、端口号等都不需要写出。所以说，这里的 <code>/</code> 对应的是主机名后面的路径部分，完整 URL 就是 <a href="http://localhost:5000/">http://localhost:5000/</a>。如果我们这里定义的 URL 规则是 <code>/hello</code>，那么完整 URL 就是 <a href="http://localhost:5000/hello">http://localhost:5000/hello</a>。</p>
+<p>整个请求的处理过程如下所示：</p>
+<ol>
+<li>当用户在浏览器地址栏访问这个地址，在这里即 <a href="http://localhost:5000/">http://localhost:5000/</a></li>
+<li>服务器解析请求，发现请求 URL 匹配的 URL 规则是 <code>/</code>，因此调用对应的处理函数 <code>hello()</code></li>
+<li>获取 <code>hello()</code> 函数的返回值，处理后返回给客户端（浏览器）</li>
+<li>浏览器接受响应，将其显示在窗口上</li>
+</ol>
+<blockquote>
+<p><strong>提示</strong> 在 Web 程序的语境下，虽然客户端可能有多种类型，但在本书里通常是指浏览器。</p>
+</blockquote>
+<h2 id="_3">程序发现机制<a class="headerlink" href="https://tutorial.helloflask.com/hello/#_3" title="Permanent link">¶</a></h2>
+<p>如果你把上面的程序保存成其他的名字，比如 hello.py，接着执行 <code>flask run</code> 命令会返回一个错误提示。这是因为 Flask 默认会假设你把程序存储在名为 app.py 或 wsgi.py 的文件中。如果你使用了其他名称，就要设置系统环境变量 <code>FLASK_APP</code> 来告诉 Flask 你要启动哪个程序：</p>
+<div class="highlight"><pre id="__code_4"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_4 &gt; code"></button><code>$ <span class="nb">export</span> <span class="nv">FLASK_APP</span><span class="o">=</span>hello.py
+</code></pre></div>
+<p>在 Windows CMD 中使用 set 命令：</p>
+<div class="highlight"><pre id="__code_5"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_5 &gt; code"></button><code>&gt; <span class="nb">set</span> <span class="nv">FLASK_APP</span><span class="o">=</span>hello.py
+</code></pre></div>
+<p>在 Windows PowerShell 中则使用下面的命令：</p>
+<div class="highlight"><pre id="__code_6"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_6 &gt; code"></button><code>&gt; <span class="nv">$env</span>:FLASK_APP <span class="o">=</span> <span class="s2">"hello.py"</span>
+</code></pre></div>
+<p>Flask 通过读取这个环境变量值对应的模块寻找要运行的程序实例，你可以把它设置成下面这些值：</p>
+<ul>
+<li>模块名</li>
+<li>Python 导入路径</li>
+<li>文件目录路径</li>
+</ul>
+<h2 id="_4">管理环境变量<a class="headerlink" href="https://tutorial.helloflask.com/hello/#_4" title="Permanent link">¶</a></h2>
+<p>现在在启动 Flask 程序的时候，我们通常要和两个环境变量打交道：<code>FLASK_APP</code> 和 <code>FLASK_DEBUG</code>。因为我们的程序现在的名字是 app.py，暂时不需要设置 <code>FLASK_APP</code>。<code>FLASK_DEBUG</code> 用来开启调试模式（debug mode）。调试模式开启后，当程序出错，浏览器页面上会显示错误信息；代码出现变动后，程序会自动重载。</p>
+<p>下面是手动设置环境变量 <code>FLASK_DEBUG</code> 来开启调试模式的示例：</p>
+<div class="highlight"><pre id="__code_7"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_7 &gt; code"></button><code tabindex="0"><span class="o">(</span>env<span class="o">)</span> $ <span class="nb">export</span> <span class="nv">FLASK_DEBUG</span><span class="o">=</span><span class="m">1</span>  <span class="c1"># 注意在 Windows 系统使用 set 或 $env: 替代 export，参考前面的示例</span>
+<span class="o">(</span>env<span class="o">)</span> $ flask run
+</code></pre></div>
+<p>为了不用每次打开新的终端会话都要设置环境变量，我们安装用来自动导入系统环境变量的 python-dotenv：</p>
+<div class="highlight"><pre id="__code_8"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_8 &gt; code"></button><code><span class="o">(</span>env<span class="o">)</span> $ pip install python-dotenv
+</code></pre></div>
+<p>当 python-dotenv 安装后，Flask 会从项目根目录的 .flaskenv 和 .env 文件读取环境变量并设置。我们分别使用文本编辑器创建这两个文件，或是使用更方便的 <code>touch</code> 命令创建（注意不要漏掉文件名开头的点）：</p>
+<div class="highlight"><pre id="__code_9"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_9 &gt; code"></button><code>$ touch .env .flaskenv
+</code></pre></div>
+<p>.flaskenv 用来存储 Flask 命令行系统相关的公开环境变量；而 .env 则用来存储敏感数据，不应该提交进 Git 仓库，我们把文件名 <code>.env</code> 添加到 .gitignore 文件的结尾（新建一行）来让 Git 忽略它。你可以使用编辑器打开这个文件，然后添加下面这一行内容：</p>
+<div class="highlight"><pre id="__code_10"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_10 &gt; code"></button><code>.env
+</code></pre></div>
+<p>在新创建的 .flaskenv 文件里，我们写入一行 <code>FLASK_DEBUG=1</code>，将环境变量 <code>FLASK_DEBUG</code> 的值设为 <code>1</code>，以便开启调试模式：</p>
+<div class="highlight"><pre id="__code_11"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_11 &gt; code"></button><code><span class="c1"># .flaskenv 文件</span>
+<span class="nv">FLASK_DEBUG</span><span class="o">=</span><span class="m">1</span>
+</code></pre></div>
+<p>顺便说一句，如果你安装的 Flask 版本是 2.3 或更高版本，则可以直接使用 <code>--debug</code> 命令行选项来开启调试模式，即：</p>
+<div class="highlight"><pre id="__code_12"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_12 &gt; code"></button><code><span class="o">(</span>env<span class="o">)</span> $ flask run --debug
+</code></pre></div>
+<h2 id="_5">实验时间<a class="headerlink" href="https://tutorial.helloflask.com/hello/#_5" title="Permanent link">¶</a></h2>
+<p>在这个小节，我们可以通过做一些实验，来扩展和加深对本节内容的理解。</p>
+<h3 id="_6">修改视图函数返回值<a class="headerlink" href="https://tutorial.helloflask.com/hello/#_6" title="Permanent link">¶</a></h3>
+<p>首先，你可以自由修改视图函数的返回值，比如：</p>
+<div class="highlight"><pre id="__code_13"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_13 &gt; code"></button><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">'欢迎来到我的 Watchlist！'</span>
+</code></pre></div>
+<p>返回值作为响应的主体，默认会被浏览器作为 HTML 格式解析，所以我们可以添加一个 HTML 元素标记：</p>
+<div class="highlight"><pre id="__code_14"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_14 &gt; code"></button><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">'&lt;h1&gt;Hello Totoro!&lt;/h1&gt;&lt;img src="http://helloflask.com/totoro.gif"&gt;'</span>
+</code></pre></div>
+<p>保存修改后，只需要在浏览器里刷新页面，你就会看到页面上的内容也会随之变化。</p>
+<p><img alt="2-2" src="./index_files/2-2.png"></p>
+<h3 id="url">修改 URL 规则<a class="headerlink" href="https://tutorial.helloflask.com/hello/#url" title="Permanent link">¶</a></h3>
+<p>另外，你也可以自由修改传入 <code>app.route</code> 装饰器里的 URL 规则字符串，但要注意以斜线 <code>/</code> 作为开头。比如：</p>
+<div class="highlight"><pre id="__code_15"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_15 &gt; code"></button><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/home'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">'Welcome to My Watchlist!'</span>
+</code></pre></div>
+<p>保存修改，这时刷新浏览器，则会看到一个 404 错误提示，提示页面未找到（Page Not Found）。这是因为视图函数的 URL 改成了 <code>/home</code>，而我们刷新后访问的地址仍然是旧的 <code>/</code>。如果我们把访问地址改成 <a href="http://localhost:5000/home">http://localhost:5000/home</a>，就会正确看到返回值。</p>
+<p>一个视图函数也可以绑定多个 URL，这通过附加多个装饰器实现，比如：</p>
+<div class="highlight"><pre id="__code_16"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_16 &gt; code"></button><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/index'</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/home'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">'Welcome to My Watchlist!'</span>
+</code></pre></div>
+<p>现在无论是访问 <a href="http://localhost:5000/">http://localhost:5000/</a>、<a href="http://localhost:5000/home">http://localhost:5000/home</a> 还是 <a href="http://localhost:5000/index">http://localhost:5000/index</a> 都可以看到返回值。</p>
+<p>在前面，我们之所以把传入 <code>app.route</code> 装饰器的参数称为 URL 规则，是因为我们也可以在 URL 里定义变量部分。比如下面这个视图函数会处理所有类似 <code>/user/&lt;name&gt;</code> 的请求：</p>
+<div class="highlight"><pre id="__code_17"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_17 &gt; code"></button><code><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/user/&lt;name&gt;'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">user_page</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="s1">'User page'</span>
+</code></pre></div>
+<p>不论你访问 <a href="http://localhost:5000/user/greyli">http://localhost:5000/user/greyli</a>，还是 <a href="http://localhost:5000/user/peter">http://localhost:5000/user/peter</a>，抑或是 <a href="http://localhost:5000/user/%E7%94%B2">http://localhost:5000/user/甲</a>，都会触发这个函数。通过下面的方式，我们也可以在视图函数里获取到这个变量值：</p>
+<div class="highlight"><pre id="__code_18"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_18 &gt; code"></button><code><span class="kn">from</span> <span class="nn">markupsafe</span> <span class="kn">import</span> <span class="n">escape</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/user/&lt;name&gt;'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">user_page</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">'User: </span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span>
+</code></pre></div>
+<blockquote>
+<p><strong>注意</strong> 用户输入的数据会包含恶意代码，所以不能直接作为响应返回，需要使用 MarkupSafe（Flask 的依赖之一）提供的 <code>escape()</code> 函数对 <code>name</code> 变量进行转义处理，比如把 <code>&lt;</code> 转换成 <code>&amp;lt;</code>。这样在返回响应时浏览器就不会把它们当做代码执行。</p>
+</blockquote>
+<h3 id="_7">修改视图函数名？<a class="headerlink" href="https://tutorial.helloflask.com/hello/#_7" title="Permanent link">¶</a></h3>
+<p>最后一个可以修改的部分就是视图函数的名称了。首先，视图函数的名字是自由定义的，和 URL 规则无关。和定义其他函数或变量一样，只需要让它表达出所要处理页面的含义即可。</p>
+<p>除此之外，它还有一个重要的作用：作为代表某个路由的端点（endpoint），同时用来生成视图函数对应的 URL。对于程序内的 URL，为了避免手写，Flask 提供了一个 <code>url_for</code> 函数来生成 URL，它接受的第一个参数就是端点值，默认为视图函数的名称：</p>
+<div class="highlight"><pre id="__code_19"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_19 &gt; code"></button><code><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">url_for</span>
+<span class="kn">from</span> <span class="nn">markupsafe</span> <span class="kn">import</span> <span class="n">escape</span>
+
+<span class="c1"># ...</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">'Hello'</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/user/&lt;name&gt;'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">user_page</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s1">'User: </span><span class="si">{</span><span class="n">escape</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s1">'</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">'/test'</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">test_url_for</span><span class="p">():</span>
+    <span class="c1"># 下面是一些调用示例（请访问 http://localhost:5000/test 后在命令行窗口查看输出的 URL）：</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">'hello'</span><span class="p">))</span>  <span class="c1"># 生成 hello 视图函数对应的 URL，将会输出：/</span>
+    <span class="c1"># 注意下面两个调用是如何生成包含 URL 变量的 URL 的</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">'user_page'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'greyli'</span><span class="p">))</span>  <span class="c1"># 输出：/user/greyli</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">'user_page'</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">'peter'</span><span class="p">))</span>  <span class="c1"># 输出：/user/peter</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">'test_url_for'</span><span class="p">))</span>  <span class="c1"># 输出：/test</span>
+    <span class="c1"># 下面这个调用传入了多余的关键字参数，它们会被作为查询字符串附加到 URL 后面。</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s1">'test_url_for'</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>  <span class="c1"># 输出：/test?num=2</span>
+    <span class="k">return</span> <span class="s1">'Test page'</span>
+</code></pre></div>
+<p>实验过程中编写的代码可以删掉，也可以保留，但记得为根地址返回一行问候，这是我们这一章的任务。</p>
+<h2 id="_8">本章小结<a class="headerlink" href="https://tutorial.helloflask.com/hello/#_8" title="Permanent link">¶</a></h2>
+<p>这一章我们为程序编写了主页，同时学习了 Flask 视图函数的基本编写方式。结束前，让我们提交代码：</p>
+<div class="highlight"><pre id="__code_20"><span></span><button class="md-clipboard md-icon" title="复制" data-clipboard-target="#__code_20 &gt; code"></button><code>$ git add .
+$ git commit -m <span class="s2">"Add minimal home page"</span>
+$ git push
+</code></pre></div>
+<p>为了保持简单，我们统一在章节最后一次提交所有改动。在现实世界里，通常会根据需要分为多个 commit；同样的，这里使用 <code>-m</code> 参数给出简单的提交信息。在现实世界里，你可能需要撰写更完整的提交信息。</p>
+<blockquote>
+<p><strong>提示</strong> 你可以在 GitHub 上查看本书示例程序的对应 commit：<a href="https://github.com/helloflask/watchlist/commit/eca06dcdf682dfa2883a8632814e4c65b6eae141">eca06dc</a>。</p>
+</blockquote>
+<h2 id="_9">进阶提示<a class="headerlink" href="https://tutorial.helloflask.com/hello/#_9" title="Permanent link">¶</a></h2>
+<ul>
+<li>对于 URL 变量，Flask 支持在 URL 规则字符串里对变量设置处理器，对变量进行预处理。比如 <code>/user/&lt;int:number&gt;</code> 会将 URL 中的 number 部分转换成整型。</li>
+<li>因为 Flask 的上下文机制，有一些变量和函数（比如 <code>url_for</code>函数）只能在特定的情况下才能正确执行，比如视图函数内。我们先暂时不用纠结，后面再慢慢了解。</li>
+<li>名字以 <code>.</code> 开头的文件默认会被隐藏，执行 <code>ls</code> 命令时会看不到它们，这时你可以使用 <code>ls -f</code> 命令来列出所有文件。</li>
+<li>了解 HTTP 基本知识将会有助于你了解 Flask 的工作原理。<ul>
+<li>阅读文章<a href="https://tutorial.djangogirls.org/zh/how_the_internet_works/">《互联网是如何工作的》</a>。</li>
+<li>阅读文章<a href="https://zhuanlan.zhihu.com/p/42231394">《从 HTTP 请求 - 响应循环探索 Flask 的基本工作方式》</a>。</li>
+</ul>
+</li>
+<li>如果你是<a href="http://helloflask.com/book/1">《Flask Web 开发实战》</a>的读者，这部分的进阶内容可以在第 1 章《初识 Flask》和第 2 章《HTTP 和 Flask》找到。</li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="https://tutorial.helloflask.com/ready/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 第 1 章：准备工作" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"></path></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              第 1 章：准备工作
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="https://tutorial.helloflask.com/template/" class="md-footer__link md-footer__link--next" aria-label="下一页: 第 3 章：模板" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              第 3 章：模板
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"></path></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            Copyright © 2018 <a href="https://greyli.com/" target="_blank" rel="noopener">Grey Li</a>
+          </div>
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+  <div class="md-footer-social">
+    
+      
+      
+        
+        
+      
+      <a href="https://github.com/helloflask/flask-tutorial" target="_blank" rel="noopener" title="github.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
+      </a>
+    
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/greylihui" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"></path></svg>
+      </a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset">已复制</div>
+    </div>
+    <script id="__config" type="application/json">{"base": "..", "features": [], "translations": {"clipboard.copy": "\u590d\u5236", "clipboard.copied": "\u5df2\u590d\u5236", "search.config.lang": "ja", "search.config.pipeline": "trimmer, stemmer", "search.config.separator": "[\\uff0c\\u3002]+", "search.placeholder": "\u641c\u7d22", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../assets/javascripts/workers/search.8397ff9e.min.js", "version": null}</script>
+    
+    
+      <script src="./index_files/bundle.1e84347e.min.js.下载"></script>
+      
+    
+  
+<textarea id="BFI_DATA" style="width: 1px; height: 1px; display: none;"></textarea><title> </title><div id="WidgetFloaterPanels" translate="no" style="display: none; text-align: left; direction: ltr; visibility: hidden;" class="LTRStyle"> <div id="WidgetFloater" style="display: none" onmouseover="Microsoft.Translator.OnMouseOverFloater()" onmouseout="Microsoft.Translator.OnMouseOutFloater()"> <div id="WidgetLogoPanel"> <span id="WidgetTranslateWithSpan"><span>TRANSLATE with </span><img id="FloaterLogo"></span> <span id="WidgetCloseButton" title="Exit Translation" onclick="Microsoft.Translator.FloaterOnClose()">x</span></div> <div id="LanguageMenuPanel"> <div class="DDStyle_outer"><input name="LanguageMenu_svid" type="text" id="LanguageMenu_svid" style="display:none;" autocomplete="on" value="en" onclick="this.select()"> <input name="LanguageMenu_textid" type="text" id="LanguageMenu_textid" style="display:none;" autocomplete="on" onclick="this.select()"> <span onselectstart="return false" tabindex="0" class="DDStyle" id="__LanguageMenu_header" onclick="return LanguageMenu &amp;&amp; !LanguageMenu.Show(&#39;__LanguageMenu_popup&#39;, event);" onkeydown="return LanguageMenu &amp;&amp; !LanguageMenu.Show(&#39;__LanguageMenu_popup&#39;, event);">English</span> <div style="position:relative;text-align:left;left:0;"><div style="position:absolute;width:;left:0px;"><div class="DDStyle" style="display:none;" id="__LanguageMenu_popup"> <table id="LanguageMenu" border="0"> <tbody><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ar&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#ar">Arabic</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;he&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#he">Hebrew</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;pl&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#pl">Polish</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;bg&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#bg">Bulgarian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;hi&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#hi">Hindi</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;pt&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#pt">Portuguese</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ca&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#ca">Catalan</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;mww&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#mww">Hmong Daw</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ro&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#ro">Romanian</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;zh-CHS&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#zh-CHS">Chinese Simplified</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;hu&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#hu">Hungarian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ru&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#ru">Russian</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;zh-CHT&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#zh-CHT">Chinese Traditional</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;id&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#id">Indonesian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;sk&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#sk">Slovak</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;cs&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#cs">Czech</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;it&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#it">Italian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;sl&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#sl">Slovenian</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;da&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#da">Danish</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ja&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#ja">Japanese</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;es&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#es">Spanish</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;nl&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#nl">Dutch</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;tlh&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#tlh">Klingon</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;sv&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#sv">Swedish</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;en&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#en">English</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ko&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#ko">Korean</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;th&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#th">Thai</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;et&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#et">Estonian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;lv&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#lv">Latvian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;tr&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#tr">Turkish</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;fi&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#fi">Finnish</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;lt&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#lt">Lithuanian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;uk&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#uk">Ukrainian</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;fr&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#fr">French</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ms&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#ms">Malay</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ur&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#ur">Urdu</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;de&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#de">German</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;mt&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#mt">Maltese</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;vi&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#vi">Vietnamese</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;el&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#el">Greek</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;no&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#no">Norwegian</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;cy&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#cy">Welsh</a></td> </tr><tr> <td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;ht&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#ht">Haitian Creole</a></td><td><a tabindex="-1" onclick="return LanguageMenu.onclick(&#39;fa&#39;);" ondragstart="LanguageMenu.ondragstart(event);" href="https://tutorial.helloflask.com/hello/#fa">Persian</a></td><td></td> </tr> </tbody></table> <img alt="" style="height:7px;width:17px;border-width:0px;left:20px;"> </div></div></div></div> <script type="text/javascript"> var LanguageMenu; var LanguageMenu_keys=["ar","bg","ca","zh-CHS","zh-CHT","cs","da","nl","en","et","fi","fr","de","el","ht","he","hi","mww","hu","id","it","ja","tlh","ko","lv","lt","ms","mt","no","fa","pl","pt","ro","ru","sk","sl","es","sv","th","tr","uk","ur","vi","cy"]; var LanguageMenu_values=["Arabic","Bulgarian","Catalan","Chinese Simplified","Chinese Traditional","Czech","Danish","Dutch","English","Estonian","Finnish","French","German","Greek","Haitian Creole","Hebrew","Hindi","Hmong Daw","Hungarian","Indonesian","Italian","Japanese","Klingon","Korean","Latvian","Lithuanian","Malay","Maltese","Norwegian","Persian","Polish","Portuguese","Romanian","Russian","Slovak","Slovenian","Spanish","Swedish","Thai","Turkish","Ukrainian","Urdu","Vietnamese","Welsh"]; var LanguageMenu_callback=function(){ }; var LanguageMenu_popupid='__LanguageMenu_popup'; </script> </div> <div id="CTFLinksPanel"> <span id="ExternalLinksPanel"><a id="HelpLink" title="Help" target="_blank" href="https://go.microsoft.com/?linkid=9722454"> <img id="HelpImg"></a> <a id="EmbedLink" href="javascript:Microsoft.Translator.FloaterShowEmbed()" title="Get this widget for your own site"> <img id="EmbedImg"></a> <a id="ShareLink" title="Share translated page with friends" href="javascript:Microsoft.Translator.FloaterShowSharePanel()"> <img id="ShareImg"></a> </span> </div> <div id="FloaterProgressBar"> <span id="ProgressFill"></span> </div> </div> <div id="WidgetFloaterCollapsed" style="display: none" onmouseover="Microsoft.Translator.OnMouseOverFloater()"> <span>TRANSLATE with </span><img id="CollapsedLogoImg"></div> <div id="FloaterSharePanel" style="display: none"> <div id="ShareTextDiv"> <span id="ShareTextSpan"> COPY THE URL BELOW </span> </div> <div id="ShareTextboxDiv"> <input name="ShareTextbox" type="text" id="ShareTextbox" readonly="readonly" onclick="this.select()"> <!--a id="TwitterLink" title="Share on Twitter"> <img id="TwitterImg" /></a> <a-- id="FacebookLink" title="Share on Facebook"> <img id="FacebookImg" /></a--> <a id="EmailLink" title="Email this translation"> <img id="EmailImg"></a> </div> <div id="ShareFooter"> <span id="ShareHelpSpan"><a id="ShareHelpLink"> <img id="ShareHelpImg"></a></span> <span id="ShareBackSpan"><a id="ShareBack" href="javascript:Microsoft.Translator.FloaterOnShareBackClick()" title="Back To Translation"> Back</a></span> </div> <input name="EmailSubject" type="hidden" id="EmailSubject" value="Check out this page in {0} translated from {1}"> <input name="EmailBody" type="hidden" id="EmailBody" value="Translated: {0}%0d%0aOriginal: {1}%0d%0a%0d%0aAutomatic translation powered by Microsoft® Translator%0d%0ahttp://www.bing.com/translator?ref=MSTWidget"> <input type="hidden" id="ShareHelpText" value="This link allows visitors to launch this page and automatically translate it to {0}."> </div> <div id="FloaterEmbed" style="display: none"> <div id="EmbedTextDiv"> <span id="EmbedTextSpan">EMBED THE SNIPPET BELOW IN YOUR SITE</span> <a id="EmbedHelpLink" title="Copy this code and place it into your HTML."> <img id="EmbedHelpImg"></a> </div> <div id="EmbedTextboxDiv"> <input name="EmbedSnippetTextBox" type="text" id="EmbedSnippetTextBox" readonly="readonly" value="&lt;div id=&#39;MicrosoftTranslatorWidget&#39; class=&#39;Dark&#39; style=&#39;color:white;background-color:#555555&#39;&gt;&lt;/div&gt;&lt;script type=&#39;text/javascript&#39;&gt;setTimeout(function(){var s=document.createElement(&#39;script&#39;);s.type=&#39;text/javascript&#39;;s.charset=&#39;UTF-8&#39;;s.src=((location &amp;&amp; location.href &amp;&amp; location.href.indexOf(&#39;https&#39;) == 0)?&#39;https://ssl.microsofttranslator.com&#39;:&#39;http://www.microsofttranslator.com&#39;)+&#39;/ajax/v3/WidgetV3.ashx?siteData=ueOIGRSKkd965FeEGM5JtQ**&amp;ctf=true&amp;ui=true&amp;settings=manual&amp;from=en&#39;;var p=document.getElementsByTagName(&#39;head&#39;)[0]||document.documentElement;p.insertBefore(s,p.firstChild); },0);&lt;/script&gt;" onclick="this.select()"> </div> <div id="EmbedNoticeDiv"><span id="EmbedNoticeSpan">Enable collaborative features and customize widget: <a href="http://www.bing.com/widget/translator" target="_blank">Bing Webmaster Portal</a></span></div> <div id="EmbedFooterDiv"><span id="EmbedBackSpan"><a href="javascript:Microsoft.Translator.FloaterOnEmbedBackClick()" title="Back To Translation">Back</a></span></div> </div> <script type="text/javascript"> var intervalId = setInterval(function () { if (MtPopUpList) { LanguageMenu = new MtPopUpList(); var langMenu = document.getElementById(LanguageMenu_popupid); var origLangDiv = document.createElement("div"); origLangDiv.id = "OriginalLanguageDiv"; origLangDiv.innerHTML = "<span id='OriginalTextSpan'>ORIGINAL: </span><span id='OriginalLanguageSpan'></span>"; langMenu.appendChild(origLangDiv); LanguageMenu.Init('LanguageMenu', LanguageMenu_keys, LanguageMenu_values, LanguageMenu_callback, LanguageMenu_popupid); window["LanguageMenu"] = LanguageMenu; clearInterval(intervalId); } }, 1); </script> </div><div class="TnITTtw-fp-collapsed-button" style="display: block;"></div><div class="TnITTtw-mate-fp-bar" translate="no" style="z-index: 4; width: 0px; height: 0px; opacity: 0; display: none;">    <div class="TnITTtw-hide-fp-bar" style="display: none;"></div>    <div class="TnITTtw-current-page-lang" style="display: none;">此页面的语言为中文（简体）</div>    <div class="TnITTtw-cta-button-layout" style="display: none;">        <div class="TnITTtw-spinner">            <div class="TnITTtw-bounce1"></div>            <div class="TnITTtw-bounce2"></div>            <div class="TnITTtw-bounce3"></div>        </div>        <div class="TnITTtw-mw-button TnITTtw-fp-translate TnITTtw-high-cta" style="display: none;">翻译为</div>    </div>    <div class="TnITTtw-change-language TnITTtw-select" data-for-serial="3" style="display: none;"></div>    <div class="TnITTtw-stop-fp"></div>    <div class="TnITTtw-toggle-iphone-settings" style="display: none;"></div>    <div class="TnITTtw-ui_selector" style="display: none;">        <div class="TnITTtw-options-arrow" style="display: none;"></div>        <div class="TnITTtw-options TnITTtw-opt-3 TnITTtw-standalone" data-serial="3" style="display: none; z-index: 998;">            <div class="TnITTtw-dd-search">                <input class="TnITTtw-dd-input" type="text" data-dir="to" placeholder="搜索" data-width="NaN">            </div>            <div id="selVisibleScroll-3">                <div id="selEntireScroll-3">                    <div class="TnITTtw-inner-options-layout">                        <ul class="TnITTtw-list"><li class="lang-zh-CN TnITTtw-option" index="1"><span id="lang-zh-CN" val="zh-CN" class="lang-zh-CN">中文（简体）</span></li><li class="lang-zh-TW TnITTtw-option" index="2"><span id="lang-zh-TW" val="zh-TW" class="lang-zh-TW">中文（繁体）</span></li><li class="lang-da TnITTtw-option" index="3"><span id="lang-da" val="da" class="lang-da">丹麦语</span></li><li class="lang-uk TnITTtw-option" index="4"><span id="lang-uk" val="uk" class="lang-uk">乌克兰语</span></li><li class="lang-ur TnITTtw-option" index="5"><span id="lang-ur" val="ur" class="lang-ur">乌尔都语</span></li><li class="lang-hy TnITTtw-option" index="6"><span id="lang-hy" val="hy" class="lang-hy">亚美尼亚语</span></li><li class="lang-ru TnITTtw-option" index="7"><span id="lang-ru" val="ru" class="lang-ru">俄语</span></li><li class="lang-bg TnITTtw-option" index="8"><span id="lang-bg" val="bg" class="lang-bg">保加利亚语</span></li><li class="lang-hr TnITTtw-option" index="9"><span id="lang-hr" val="hr" class="lang-hr">克罗地亚语</span></li><li class="lang-is TnITTtw-option" index="10"><span id="lang-is" val="is" class="lang-is">冰岛语</span></li><li class="lang-ca TnITTtw-option" index="11"><span id="lang-ca" val="ca" class="lang-ca">加泰罗尼亚语</span></li><li class="lang-hu TnITTtw-option" index="12"><span id="lang-hu" val="hu" class="lang-hu">匈牙利语</span></li><li class="lang-kn TnITTtw-option" index="13"><span id="lang-kn" val="kn" class="lang-kn">卡纳达语</span></li><li class="lang-hi TnITTtw-option" index="14"><span id="lang-hi" val="hi" class="lang-hi">印地语</span></li><li class="lang-id TnITTtw-option" index="15"><span id="lang-id" val="id" class="lang-id">印尼语</span></li><li class="lang-gu TnITTtw-option" index="16"><span id="lang-gu" val="gu" class="lang-gu">古吉拉特语</span></li><li class="lang-kk TnITTtw-option" index="17"><span id="lang-kk" val="kk" class="lang-kk">哈萨克语</span></li><li class="lang-tr TnITTtw-option" index="18"><span id="lang-tr" val="tr" class="lang-tr">土耳其语</span></li><li class="lang-cy TnITTtw-option" index="19"><span id="lang-cy" val="cy" class="lang-cy">威尔士语</span></li><li class="lang-bn TnITTtw-option" index="20"><span id="lang-bn" val="bn" class="lang-bn">孟加拉语</span></li><li class="lang-ne TnITTtw-option" index="21"><span id="lang-ne" val="ne" class="lang-ne">尼泊尔语</span></li><li class="lang-af TnITTtw-option" index="22"><span id="lang-af" val="af" class="lang-af">布尔语(南非荷兰语)</span></li><li class="lang-iw TnITTtw-option" index="23"><span id="lang-iw" val="iw" class="lang-iw">希伯来语</span></li><li class="lang-el TnITTtw-option" index="24"><span id="lang-el" val="el" class="lang-el">希腊语</span></li><li class="lang-ku TnITTtw-option" index="25"><span id="lang-ku" val="ku" class="lang-ku">库尔德语</span></li><li class="lang-de TnITTtw-option" index="26"><span id="lang-de" val="de" class="lang-de">德语</span></li><li class="lang-it TnITTtw-option" index="27"><span id="lang-it" val="it" class="lang-it">意大利语</span></li><li class="lang-lv TnITTtw-option" index="28"><span id="lang-lv" val="lv" class="lang-lv">拉脱维亚语</span></li><li class="lang-no TnITTtw-option" index="29"><span id="lang-no" val="no" class="lang-no">挪威语</span></li><li class="lang-cs TnITTtw-option" index="30"><span id="lang-cs" val="cs" class="lang-cs">捷克语</span></li><li class="lang-sk TnITTtw-option" index="31"><span id="lang-sk" val="sk" class="lang-sk">斯洛伐克语</span></li><li class="lang-sl TnITTtw-option" index="32"><span id="lang-sl" val="sl" class="lang-sl">斯洛文尼亚语</span></li><li class="lang-pa TnITTtw-option" index="33"><span id="lang-pa" val="pa" class="lang-pa">旁遮普语</span></li><li class="lang-ja TnITTtw-option" index="34"><span id="lang-ja" val="ja" class="lang-ja">日语</span></li><li class="lang-ps TnITTtw-option" index="35"><span id="lang-ps" val="ps" class="lang-ps">普什图语</span></li><li class="lang-mi TnITTtw-option" index="36"><span id="lang-mi" val="mi" class="lang-mi">毛利语</span></li><li class="lang-fr TnITTtw-option" index="37"><span id="lang-fr" val="fr" class="lang-fr">法语</span></li><li class="lang-pl TnITTtw-option" index="38"><span id="lang-pl" val="pl" class="lang-pl">波兰语</span></li><li class="lang-fa TnITTtw-option" index="39"><span id="lang-fa" val="fa" class="lang-fa">波斯语</span></li><li class="lang-te TnITTtw-option" index="40"><span id="lang-te" val="te" class="lang-te">泰卢固语</span></li><li class="lang-ta TnITTtw-option" index="41"><span id="lang-ta" val="ta" class="lang-ta">泰米尔语</span></li><li class="lang-th TnITTtw-option" index="42"><span id="lang-th" val="th" class="lang-th">泰语</span></li><li class="lang-ht TnITTtw-option" index="43"><span id="lang-ht" val="ht" class="lang-ht">海地克里奥尔语</span></li><li class="lang-et TnITTtw-option" index="44"><span id="lang-et" val="et" class="lang-et">爱沙尼亚语</span></li><li class="lang-sv TnITTtw-option" index="45"><span id="lang-sv" val="sv" class="lang-sv">瑞典语</span></li><li class="lang-lt TnITTtw-option" index="46"><span id="lang-lt" val="lt" class="lang-lt">立陶宛语</span></li><li class="lang-my TnITTtw-option" index="47"><span id="lang-my" val="my" class="lang-my">缅甸语</span></li><li class="lang-ro TnITTtw-option" index="48"><span id="lang-ro" val="ro" class="lang-ro">罗马尼亚语</span></li><li class="lang-lo TnITTtw-option" index="49"><span id="lang-lo" val="lo" class="lang-lo">老挝语</span></li><li class="lang-fi TnITTtw-option" index="50"><span id="lang-fi" val="fi" class="lang-fi">芬兰语</span></li><li class="lang-en TnITTtw-option" index="51"><span id="lang-en" val="en" class="lang-en">英语</span></li><li class="lang-nl TnITTtw-option" index="52"><span id="lang-nl" val="nl" class="lang-nl">荷兰语</span></li><li class="lang-sm TnITTtw-option" index="53"><span id="lang-sm" val="sm" class="lang-sm">萨摩亚语</span></li><li class="lang-pt TnITTtw-option" index="54"><span id="lang-pt" val="pt" class="lang-pt">葡萄牙语</span></li><li class="lang-es TnITTtw-option" index="55"><span id="lang-es" val="es" class="lang-es">西班牙语</span></li><li class="lang-vi TnITTtw-option" index="56"><span id="lang-vi" val="vi" class="lang-vi">越南语</span></li><li class="lang-az TnITTtw-option" index="57"><span id="lang-az" val="az" class="lang-az">阿塞拜疆语</span></li><li class="lang-am TnITTtw-option" index="58"><span id="lang-am" val="am" class="lang-am">阿姆哈拉语</span></li><li class="lang-sq TnITTtw-option" index="59"><span id="lang-sq" val="sq" class="lang-sq">阿尔巴尼亚语</span></li><li class="lang-ar TnITTtw-option" index="60"><span id="lang-ar" val="ar" class="lang-ar">阿拉伯语</span></li><li class="lang-ko TnITTtw-option" index="61"><span id="lang-ko" val="ko" class="lang-ko">韩语</span></li><li class="lang-mg TnITTtw-option" index="62"><span id="lang-mg" val="mg" class="lang-mg">马尔加什语</span></li><li class="lang-mr TnITTtw-option" index="63"><span id="lang-mr" val="mr" class="lang-mr">马拉地语</span></li><li class="lang-ml TnITTtw-option" index="64"><span id="lang-ml" val="ml" class="lang-ml">马拉雅拉姆语</span></li><li class="lang-ms TnITTtw-option" index="65"><span id="lang-ms" val="ms" class="lang-ms">马来语</span></li><li class="lang-mt TnITTtw-option" index="66"><span id="lang-mt" val="mt" class="lang-mt">马耳他语</span></li><li class="lang-km TnITTtw-option" index="67"><span id="lang-km" val="km" class="lang-km">高棉语</span></li></ul>                    </div>                </div>                <div id="sel-scrollbar-3">                    <div id="sel-track-3">                        <div id="sel-dragBar-3"></div>                    </div>                </div>            </div>        </div>    </div>    <div class="TnITTtw-fp-options" style="display: none;">        <input type="checkbox" id="TnITTtw-always-translate" style="display: none;" readonly="readonly"><label for="TnITTtw-always-translate" class="TnITTtw-always-translate-label TnITTtw-not-pro" style="display: none;"><span class="TnITTtw-always-translate-inner-label" style="display: none;">随时将中文（简体）翻译为</span><span class="TnITTtw-pro-label" style="display: none;">PRO</span></label>        <br style="display: none;">        <input type="checkbox" id="TnITTtw-never-translate-lang" style="display: none;"><label for="TnITTtw-never-translate-lang" class="TnITTtw-never-translate-lang-label" style="display: none;">一律不翻译中文（简体）</label>        <br style="display: none;">        <input type="checkbox" id="TnITTtw-never-translate-site" style="display: none;"><label for="TnITTtw-never-translate-site" class="TnITTtw-never-translate-site-label" style="display: none;">一律不翻译tutorial.helloflask.com</label>    </div></div></body></html>
