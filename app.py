@@ -25,26 +25,8 @@ def initdb(drop):
         db.drop_all()
     db.create_all()
     click.echo('Initialized database.')
-
-# ...
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True) # primary key
-    name = db.Column(db.String(20)) # name
-
-
-class Movie(db.Model):
-    id = db.Column(db.Integer, primary_key=True) # primary key
-    title = db.Column(db.String(60))    # movie title
-    year = db.Column(db.String(4))  # movie year
-
-@app.route('/')
-def index():
-    user = User.query.first()
-    movies = Movie.query.all()
-    return render_template('index.html', user=user, movies=movies)
-
-
-
+    
+    
 @app.cli.command()
 def forge():
     """Generate fake data."""
@@ -72,6 +54,37 @@ def forge():
 
     db.session.commit()
     click.echo('Done.')
+# ...
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # primary key
+    name = db.Column(db.String(20)) # name
+
+
+class Movie(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # primary key
+    title = db.Column(db.String(60))    # movie title
+    year = db.Column(db.String(4))  # movie year
+
+
+@app.context_processor
+def inject_user():
+    user = User.query.first()
+    return dict(user=user)
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+
+@app.route('/')
+def index():
+    movies = Movie.query.all()
+    return render_template('index.html', movies=movies)
+
+
+
+
 
 
 
