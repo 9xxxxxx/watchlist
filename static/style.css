@@ -40,7 +40,8 @@ footer {
 }
 
 .movie-list li:hover {
-    background-color: #f8f9fa;
+    background-color: rgba(14, 88, 64, 0.3);
+    
 }
 
 /* 女孩图片 */
@@ -49,33 +50,45 @@ footer {
     margin: 0 auto;
     height: 120px;
 }
+
 a {
     color: green;
     font-size: 14px
 }
 
+.basenavstyle{
+    
+    height: 40px;
+    width: 580px;
+    background-color: rgba(240, 10, 18, 0.2);
+    
+}
+
 nav ul {
+    font-weight: bold;
     list-style-type: none;
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: #333;
 }
+
 
 nav li {
     float: left;
 }
 
 nav li a {
+    
+    font-size: 20px;
     display: block;
-    color: white;
+    color: #5dddf3;
     text-align: center;
     padding: 8px 12px;
     text-decoration: none;
 }
 
 nav li a:hover {
-    background-color: #111;
+    background-color: #b68395;
 }
 
 .float-right {
@@ -100,4 +113,53 @@ nav li a:hover {
     background: #19d205;
     border-radius: 5px;
     padding: 3px 5px;
+}
+input {
+    background-color: transparent;
+}
+/* 覆盖某些浏览器对 input 元素定义的字体 */
+input[type=submit] {
+    font-family: inherit;
+}
+
+input[type=text] {
+    border: 1px solid #ddd;
+}
+
+input[name=year] {
+    width: 50px;
+}
+
+.btn {
+    background-color: transparent;
+    font-size: 12px;
+    padding: 3px 5px;
+    text-decoration: none;
+    cursor: pointer;
+    /* background-color: rgb(27, 155, 214); */
+    color: black;
+    border: 1px solid #555555;
+    border-radius: 5px;
+}
+
+.btn:hover {
+    text-decoration: none;
+    background-color: rgb(14, 170, 232);
+    color: white;
+    border: 1px solid black;
+}
+
+.alert {
+    position: relative;
+    padding: 7px;
+    margin: 7px 0;
+    border: 1px solid transparent;
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+    border-radius: 5px;
+}
+
+.inline-form {
+    display: inline;
 }
