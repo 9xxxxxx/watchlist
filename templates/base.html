@@ -4,6 +4,7 @@
     {% block head %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer" />
     <!-- 插入到页面标题上方 -->
     {% for message in get_flashed_messages() %}
     <div class="alert">{{ message }}</div>
@@ -22,9 +23,15 @@
         <nav class="basenavstyle">
             <ul>
                 <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="https://www.douban.com" target=_blank >Douban</a></li>
-                <li><a href="https://www.imdb.com" target=_blank >IMDb</a></li>
-                <li><a href="https://www.javbus.com/forum" target=_blank >showme</a></li>
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('settings') }}">Settings</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                {% endif %}
+                <li><a href="https://www.douban.com" target=_blank rel="noopener">Douban</a></li>
+                <li><a href="https://www.imdb.com" target=_blank rel="noopener">IMDb</a></li>
+                <li><a href="https://www.javbus.com/forum" target=_blank rel="noopener">showme</a></li>
             </ul>
         </nav>
     </header>
