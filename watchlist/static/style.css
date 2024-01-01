@@ -130,6 +130,13 @@ input[name=year] {
     width: 50px;
 }
 
+input[name=title] {
+    width: 120px;
+}
+input[name=poster]{
+    width: 160px;
+
+}
 .btn {
     background-color: transparent;
     font-size: 12px;
@@ -162,4 +169,8 @@ input[name=year] {
 
 .inline-form {
     display: inline;
+}
+
+input::-webkit-input-placeholder {
+    color: #0cdc47ae;
 }

@@ -13,7 +13,7 @@ if WIN:  # 如果是 Windows 系统，使用三个斜线
     prefix = 'sqlite:///'
 else:  # 否则使用四个斜线
     prefix = 'sqlite:////'
-app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'data.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(app.root_path, 'data.sqlite3')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # 关闭对模型修改的监控
 app.config['SECRET_KEY'] = 'dev'  # 等同于 app.secret_key = 'dev'
 # 在扩展类实例化前加载配置
@@ -43,13 +43,14 @@ def admin(username, password):
     click.echo('Done.')
 
 @app.cli.command()
-@click.option('--drop', is_flag=True, help='Create after drop.')
+@click.option('--drop', is_flag=True, help='Create after drop.', prompt=True) 
 def initdb(drop):
     """Initialize the database."""
     if drop:  # 是否删除数据库
+        click.echo('Drop database.')
         db.drop_all()
     db.create_all()
-    click.echo('Initialized database.')
+    click.echo('Initialized database')
     
     
 @app.cli.command()
@@ -128,12 +129,13 @@ def index():
         
         title = request.form.get('title')
         year = request.form.get('year')
+        poster = request.form.get('poster')
         
         if not title or not year or len(year) > 4 or len(title) > 60:
             flash('Invalid input.')
             return redirect(url_for('index'))
         
-        movie = Movie(title=title, year=year)
+        movie = Movie(title=title, year=year, poster=poster)
         db.session.add(movie)
         db.session.commit()
         flash('Item created.')
