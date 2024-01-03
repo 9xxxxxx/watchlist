@@ -1,33 +1,44 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<p>{{ movies|length }} Titles</p>
 {% if current_user.is_authenticated %}
-<form method="post">
-    <label for="title">电影名字</label>
-    <input type="text" name="title" autocomplete="off" id="title" required>
-    <label for="year">电影年份</label>
-    <input type="text" name="year" autocomplete="off" id="year" required>
-    <label for='poster'>电影海报</label>
-    <input type="text" name="poster" autocomplete='off' id="poster" required placeholder="请输入图片URL" placeholder-style="color:red">
-    <input class="btn" type="submit" name="submit" value="Add">
-</form>
+<div class='addmovie'>
+    <form method="post">
+        <label for="title">电影名字:</label>
+        <input type="text" name="title" autocomplete="off" id="title" required >
+        <label for="year">上映时间:</label>
+        <input type="text" name="year" autocomplete="off" id="year" required width=100px>
+        <label for='poster'>电影海报:</label>
+        <input type="text" name="poster" autocomplete='off' id="poster" required placeholder="请输入图片URL" width=120px>
+        <input class="btn" type="submit" name="submit" value="Add" >
+    </form>
+</div>
 {% endif %}
+<p>{{ movies|length }} Titles</p>
 <ul class="movie-list">
     {% for movie in movies %}
-    <li>{{ movie.title }} - {{ movie.year }}
-        <span class="float-right">
-            {%if current_user.is_authenticated %}
-            <a class="btn" href="{{ url_for('edit', movie_id=movie.id) }}">Edit</a>
-            <form class="inline-form" method="post" action="{{ url_for('delete', movie_id=movie.id) }}">
-                <input class="btn" type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure?')">
-            </form>
-            {% endif %}
-            <a class="imdb" href="https://www.imdb.com/find?q={{ movie.title }}" target="_blank" title="Find this movie on IMDb" rel="noopener">IMDb</a>
-            <a class="douban" href="https://movie.douban.com/subject_search?search_text={{ movie.title }}" target="_blank" title="Find this movie on Douban" rel="noopener">豆瓣</a>       
-        </span>
+    <li>
+        <div class="split-text">
+            <p style="text-align: left;">{{ movie.title }} - {{ movie.year }}</p>
+            <p style="text-align: right;">添加时间: {{movie.time.strftime("%Y-%m-%d %H:%M:%S")}}</p>
+        </div>
+        <div >
+            <section class="show">
+                <a href="{{url_for('detail', movie_id=movie.id)}}"><img src="{{movie.poster}}" alt="tt" class='poster'></a>
+                <p name="review">{{movie.review}}</p>
+            </section>
+        </div>
         <div>
-            <img src="{{movie.poster}}" alt="tt" width="100px" height="130px">
+            <span class="float-right">
+                {%if current_user.is_authenticated %}
+                <a class="btn" href="{{ url_for('edit', movie_id=movie.id) }}">Edit</a>
+                <form class="inline-form" method="post" action="{{ url_for('delete', movie_id=movie.id) }}">
+                    <input class="btn" type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure?')">
+                </form>
+                {% endif %}
+                <a class="imdb" href="https://www.imdb.com/find?q={{ movie.title }}" target="_blank" title="Find this movie on IMDb" rel="noopener">IMDb</a>
+                <a class="douban" href="https://movie.douban.com/subject_search?search_text={{ movie.title }}" target="_blank" title="Find this movie on Douban" rel="noopener">豆&nbsp;瓣</a>
+            </span>
         </div>
     </li>
     {% endfor %}
@@ -35,3 +46,4 @@
 
 <img alt="Walking Totoro" class="girl2" src="{{ url_for('static', filename='images/redhair.gif') }}" title="to~to~ro~">
 {% endblock %}
+

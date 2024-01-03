@@ -15,7 +15,6 @@ else:  # 否则使用四个斜线
 app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(os.path.dirname(app.root_path), os.getenv('DATABASE_FILE', 'data.sqlite3'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev')
-app.config['host'] = '0.0.0.0'
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 
@@ -32,6 +31,8 @@ def inject_user():
     from watchlist.models import User
     user = User.query.first()
     return dict(user=user)
+
+
 
 from watchlist import views, errors, commands
 

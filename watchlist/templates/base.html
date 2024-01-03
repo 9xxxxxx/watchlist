@@ -12,9 +12,12 @@
     <title>{{ user.name }}'s Watchlist</title>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
     {% endblock %}
 </head>
 <body>
+    <audio id="music" src="static\music\Myway.mp3" preload='auto' loop></audio>
+    <img src="{{ url_for('static', filename='images/player.gif') }}" alt="player" id="player"></img>
     <h2>
         <img alt="Avatar" class="avatar" src="{{ url_for('static', filename='images/avatar.png') }}">
         {{ user.name }}'s Watchlist
@@ -29,6 +32,7 @@
                 {% else %}
                     <li><a href="{{ url_for('login') }}">Login</a></li>
                 {% endif %}
+                <li><a href="{{ url_for('signup') }}">SignUp</a></li>
                 <li><a href="https://www.douban.com" target=_blank rel="noopener">Douban</a></li>
                 <li><a href="https://www.imdb.com" target=_blank rel="noopener">IMDb</a></li>
                 <li><a href="https://www.javbus.com/forum" target=_blank rel="noopener">showme</a></li>
@@ -36,6 +40,7 @@
         </nav>
     </header>
     {% block content %}{% endblock %}
+
     <footer>
         <small>&copy; 2024 <a href="https://github.com/9xxxxxx/watchlist">GArryHOst</a></small>
     </footer>

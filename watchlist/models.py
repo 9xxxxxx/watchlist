@@ -1,3 +1,4 @@
+import datetime
 from watchlist import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -21,3 +22,14 @@ class Movie(db.Model):
     title = db.Column(db.String(60))    # movie title
     year = db.Column(db.String(4))  # movie year
     poster = db.Column(db.String(256))
+    review = db.Column(db.Text)
+    time = db.Column(db.DateTime)
+    
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    movie_id = db.Column(db.Integer)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    content = db.Column(db.Text)
+    time = db.Column(db.DateTime)
+
