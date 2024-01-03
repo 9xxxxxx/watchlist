@@ -161,12 +161,9 @@ input[name=edit_poster]{
     color: wheat;
 }
 
-textarea[name=edit_review]{
-    width: 580px;
-    height: 260px;
-    background-color: transparent;
-    font-size: large;
-    color: wheat;
+input[name=edit_review]{
+    display: none;;
+    
 }
 
 .btn {
@@ -255,5 +252,9 @@ label[name=signup]{
     display:flex;
     justify-content: center;
     
+}
+
+.note-editable {
+    color: aqua;
 }
 

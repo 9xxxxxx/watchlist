@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
-
+{% block head %}
+{{super()}}
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script src="{{ url_for('static', filename='edit.js') }}" defer></script>
+{% endblock %}
 {% block content %}
 <h3>Edit item</h3>
 <ul class="movie-list">
@@ -30,7 +36,9 @@
     <p><label for="poster">poster:</label></p>
     <p><input type="text" name="edit_poster" autocomplete="off" id='poster' required value="{{ movie.poster }}"></p>
     <p><label for="review">review:</label></p>
-    <p><textarea type="text" name="edit_review" autocomplete="off" id='review' required >{{ movie.review }}</textarea></p>
-    <p><input class="btn" type="submit" name="submit" value="Update"></p>   
+    <p><input type="text" name="edit_review" autocomplete="off" id='review' required ></p> 
+    <div id="summernote"  color='wheat';>{{movie.review}}</div>
+    <p><input class="btn" type="submit" name="edit_submit" value="Update" id="submit_review"></p>  
 </form>
+
 {% endblock %}
