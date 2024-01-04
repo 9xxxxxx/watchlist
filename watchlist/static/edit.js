@@ -19,6 +19,7 @@ $('#summernote').summernote({
     });
 
 var review = document.getElementById('submit_review');
+var submit = document.getElementById('submit')
 
 review.addEventListener('click', function() {
     // 获取Summernote编辑器中的内容
@@ -33,5 +34,13 @@ review.addEventListener('click', function() {
 
     // 现在pureTextContent中包含了没有HTML标签的纯文本内容
     var feeling= document.getElementById('review');
-    feeling.value = pureTextContent
+    var content = document.getElementById('content');
+    if(content){
+        $("#content").val(pureTextContent);
+    }
+    if(feeling){
+        $("#review").val(pureTextContent);
+    
+    }
 });
+

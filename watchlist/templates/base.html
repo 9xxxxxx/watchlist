@@ -1,3 +1,4 @@
+{% from 'bootstrap5/form.html' import render_form %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +14,7 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
     <script src="{{ url_for('static', filename='index.js') }}"></script>
+    {{ bootstrap.load_css() }}
     {% endblock %}
 </head>
 <body>
@@ -39,6 +41,7 @@
             </ul>
         </nav>
     </header>
+    {{ bootstrap.load_js() }}
     {% block content %}{% endblock %}
 
     <footer>

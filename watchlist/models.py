@@ -16,7 +16,6 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 
-
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True) # primary key
     title = db.Column(db.String(60))    # movie title
@@ -28,8 +27,12 @@ class Movie(db.Model):
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    movie_id = db.Column(db.Integer)
+    movie_id = db.Column(db.Integer,db.ForeignKey('movie.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     content = db.Column(db.Text)
     time = db.Column(db.DateTime)
 
+class Music(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60))
+    data = db.Column(db.BLOB)

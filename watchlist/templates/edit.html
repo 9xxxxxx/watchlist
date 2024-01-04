@@ -11,8 +11,8 @@
 <ul class="movie-list">
     <li>
         <div class="split-text">
-            <p style="text-align: left;">{{ movie.title }} - {{ movie.year }}</p>
-            <p style="text-align: right;">添加时间: {{movie.time.strftime("%Y-%m-%d %H:%M:%S")}}</p>
+            <p>{{ movie.title }} - {{ movie.year }}</p>
+            <p> 添加时间: {{movie.time.strftime("%Y-%m-%d %H:%M:%S")}}</p>
         </div>
         <div >
             <section class="show">
@@ -22,8 +22,8 @@
         </div>
         <div>
             <span class="float-right">
-                <a class="imdb" href="https://www.imdb.com/find?q={{ movie.title }}" target="_blank" title="Find this movie on IMDb" rel="noopener">IMDb</a>
-                <a class="douban" href="https://movie.douban.com/subject_search?search_text={{ movie.title }}" target="_blank" title="Find this movie on Douban" rel="noopener">豆&nbsp;瓣</a>
+                <a class="imdb btn btn-primary btn-md" href="https://www.imdb.com/find?q={{ movie.title }}" target="_blank" title="Find this movie on IMDb" rel="noopener">IMDb</a>
+                <a class="douban btn btn-primary btn-md" href="https://movie.douban.com/subject_search?search_text={{ movie.title }}" target="_blank" title="Find this movie on Douban" rel="noopener">豆&nbsp;瓣</a>
             </span>
         </div>
     </li>
@@ -37,8 +37,8 @@
     <p><input type="text" name="edit_poster" autocomplete="off" id='poster' required value="{{ movie.poster }}"></p>
     <p><label for="review">review:</label></p>
     <p><input type="text" name="edit_review" autocomplete="off" id='review' required ></p> 
-    <div id="summernote"  color='wheat';>{{movie.review}}</div>
-    <p><input class="btn" type="submit" name="edit_submit" value="Update" id="submit_review"></p>  
+    <input id="summernote"  color='wheat';></input>
+    <p><input class="btn btn-primary btn-md" type="submit" name="edit_submit" value="Update" id="submit_review"></p>  
 </form>
 
 {% endblock %}

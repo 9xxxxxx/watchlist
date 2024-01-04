@@ -1,10 +1,11 @@
+from datetime import datetime
 from watchlist import app, db
-from watchlist.models import Movie, User
+from watchlist.models import Movie, User, Comment
 from flask import redirect, url_for, request, render_template, flash
 from flask_login import current_user, login_required, login_user, logout_user
 
 from werkzeug.security import generate_password_hash
-
+from watchlist.myform import LoginForm, RegisterForm, CommentForm
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -77,16 +78,18 @@ def login():
             return redirect(url_for('login'))
 
         user = User.query.filter_by(username=username).first()
-        # 验证用户名和密码是否一致
-        if username == user.username and user.validate_password(password):
-            login_user(user)
-            flash('Login success.')
-            return redirect(url_for('index'))
-
-        flash('Invalid username or password.')
-        return redirect(url_for('login'))
-    
-    return render_template('login.html')
+        if user:
+            # 验证用户名和密码是否一致
+            if username == user.username and user.validate_password(password):
+                login_user(user)
+                flash('Login success.')
+                return redirect(url_for('index'))
+        else:
+            flash('Invalid username or password.')
+            return redirect(url_for('login'))
+        
+    form = LoginForm()
+    return render_template('login.html', form = form)
 
 
 @app.route('/logout')
@@ -134,9 +137,29 @@ def signup():
         db.session.commit()
         return redirect(url_for('login'))
     
-    return render_template('signup.html')
+    form = RegisterForm()
+    return render_template('signup.html', form=form)
 
 @app.route('/movie/detail/<int:movie_id>')
 def detail(movie_id):
     movie = Movie.query.get(movie_id)
-    return render_template('detail.html', movie=movie)
+    comments = Comment.query.filter_by(movie_id=movie_id).all()
+    return render_template('detail.html', movie=movie, comments=comments)
+
+
+@app.route('/movie/comment/<int:movie_id>', methods=['GET', 'POST'])
+@login_required
+def comment(movie_id):
+    if request.method == 'POST':
+        content = request.form.get('Content')
+        user_id = current_user.id
+        time = datetime.now()
+        
+        comment = Comment(movie_id=movie_id, content=content, user_id=user_id, time=time)
+        db.session.add(comment)
+        db.session.commit()
+        
+        return redirect(url_for('detail', movie_id=movie_id))
+    
+    form = CommentForm()
+    return render_template('comment.html', form=form)

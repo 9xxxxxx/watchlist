@@ -50,9 +50,8 @@ def forge():
         {'title': '麻将 - Mahjong', 'year': '1996','poster':'https://img9.doubanio.com/view/photo/m/public/p2873829595.webp'},
         {'title': '燕尾蝶 - Swallowtail Butterfly', 'year': '1996','poster':'https://img3.doubanio.com/view/photo/m/public/p2056451383.webp'},
         {'title': '喜剧之王 - King of Comedy', 'year': '1999','poster':'https://img1.doubanio.com/view/photo/m/public/p2181431029.webp'},
-        {'title': '鬼子来了 - Devils on the Doorstep', 'year': '1999','poster':'https://img1.doubanio.com/view/photo/m/public/p2553104888.webp'},
-        {'title': '机器人总动员 - WALL-E', 'year': '2008','poster':'https://img1.doubanio.com/view/photo/m/public/p1037415760.webp'},
-        {'title': '麦兜 - The Pork of Music', 'year': '2012','poster':'https://img9.doubanio.com/view/photo/m/public/p1626461596.webp'},
+        {'title': '鬼子来了 - Devils on the Doorstep', 'year': '1999','poster':'https://img1.doubanio.com/view/photo/m/public/p2553104888.webp'}
+       
     ]
     
     user = User(name=name, username='jack', password_hash=generate_password_hash('000'))
@@ -63,4 +62,4 @@ def forge():
         db.session.add(movie)
 
     db.session.commit()
-    click.echo('Done.')
+    click.echo('Done. initial user:jack has been created,password: 000.' )

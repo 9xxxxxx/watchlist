@@ -2,13 +2,5 @@
 
 {% block content %}
 <h3>Sign Up</h3>
-<form method="post">
-    <label for="username" name='signup'>Username:</label>
-    <input type="text" name="username" autocomplete="off" id="username" required >
-    </br>
-    <label for="password" name='signup'>password:</label>
-    <input type="text" name="password"  id="password" autocomplete="off" required >
-    </br>
-    <input class="btn" type="submit" name="signup_submit" value="submit">
-</form>
+{{ render_form(form) }}
 {% endblock %}
