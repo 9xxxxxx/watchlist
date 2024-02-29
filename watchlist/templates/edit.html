@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% block head %}
 {{super()}}
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script src="{{ url_for('static', filename='edit.js') }}" defer></script>
@@ -30,13 +29,13 @@
 </ul>
 <form method="post">
     <p><label for="title">Title:</label></p>
-    <p><input type="text" name="edit_title" autocomplete="off"  id='title' required value="{{ movie.title }}"></p>
+    <p><input type="text" name="edit_title" autocomplete="off"  id='title'  value="{{ movie.title }}"></p>
     <p><label for="year">Year:</label></p>
-    <p><input type="text" name="edit_year" autocomplete="off" id='year' required value="{{ movie.year }}"></p>
+    <p><input type="text" name="edit_year" autocomplete="off" id='year'  value="{{ movie.year }}"></p>
     <p><label for="poster">poster:</label></p>
-    <p><input type="text" name="edit_poster" autocomplete="off" id='poster' required value="{{ movie.poster }}"></p>
+    <p><input type="text" name="edit_poster" autocomplete="off" id='poster'  value="{{ movie.poster }}"></p>
     <p><label for="review">review:</label></p>
-    <p><input type="text" name="edit_review" autocomplete="off" id='review' required ></p> 
+    <p><input type="text" name="edit_review" autocomplete="off" id='review'  ></p> 
     <input id="summernote"  color='wheat';></input>
     <p><input class="btn btn-primary btn-md" type="submit" name="edit_submit" value="Update" id="submit_review"></p>  
 </form>

@@ -1,0 +1,51 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="index.js"></script>
+    <title>Document</title>
+</head>
+<body id="background">
+    <!-- 在页面的某个角落添加一个按钮 -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#backgroundModal">
+        更换背景
+    </button>
+    
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="backgroundModal" tabindex="-1" role="dialog" aria-labelledby="backgroundModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="backgroundModalLabel">选择背景</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="关闭">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <img src="bg.jpg" class="background-thumbnail" data-full-image="nb.jpg">
+                <img src="bg.jpg" class="background-thumbnail" data-full-image="path/to/image1.jpg">
+                <img src="bg.jpg" class="background-thumbnail" data-full-image="path/to/image1.jpg">
+                <img src="bg.jpg" class="background-thumbnail" data-full-image="path/to/image1.jpg">
+                <img src="bg.jpg" class="background-thumbnail" data-full-image="path/to/image1.jpg">
+                <img src="bg.jpg" class="background-thumbnail" data-full-image="path/to/image1.jpg">
+                <img src="bg.jpg" class="background-thumbnail" data-full-image="path/to/image1.jpg">
+                <img src="bg.jpg" class="background-thumbnail" data-full-image="path/to/image1.jpg">
+                <img src="bg.jpg" class="background-thumbnail" data-full-image="path/to/image1.jpg">
+                <img src="bg1.jpg" class="background-thumbnail" data-full-image="path/to/image2.jpg">
+            <!-- 在这里添加背景预览图 -->
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+</body>
+</html>

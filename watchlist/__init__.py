@@ -1,6 +1,6 @@
 import sys
 import os
-
+from datetime import timedelta
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -15,6 +15,7 @@ else:  # 否则使用四个斜线
 app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(os.path.dirname(app.root_path), os.getenv('DATABASE_FILE', 'data.sqlite3'))
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev')
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=1)
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)

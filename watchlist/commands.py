@@ -53,7 +53,9 @@ def forge():
         {'title': '鬼子来了 - Devils on the Doorstep', 'year': '1999','poster':'https://img1.doubanio.com/view/photo/m/public/p2553104888.webp'}
        
     ]
-    
+    theme = [
+        {}
+    ]
     user = User(name=name, username='jack', password_hash=generate_password_hash('000'))
     db.session.add(user)
     for m in movies:
@@ -63,3 +65,10 @@ def forge():
 
     db.session.commit()
     click.echo('Done. initial user:jack has been created,password: 000.' )
+    
+
+@app.cli.command()
+def inittheme():
+    click.echo('Init theme...')
+    db.create
+   

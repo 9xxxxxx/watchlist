@@ -6,6 +6,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <!-- 插入到页面标题上方 -->
     {% for message in get_flashed_messages() %}
     <div class="alert">{{ message }}</div>
@@ -13,12 +16,12 @@
     <title>{{ user.name }}'s Watchlist</title>
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
-    <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <script src="{{ url_for('static', filename='index.js') }}" ></script>
     {{ bootstrap.load_css() }}
     {% endblock %}
 </head>
-<body>
-    <audio id="music" src="static\music\Myway.mp3" preload='auto' loop></audio>
+<body id='background'>
+    <audio id="music" src="/static/music/Myway.mp3" preload='auto' loop></audio>
     <img src="{{ url_for('static', filename='images/player.gif') }}" alt="player" id="player"></img>
     <h2>
         <img alt="Avatar" class="avatar" src="{{ url_for('static', filename='images/avatar.png') }}">
@@ -43,7 +46,38 @@
     </header>
     {{ bootstrap.load_js() }}
     {% block content %}{% endblock %}
+    <!-- 在页面的某个角落添加一个按钮 -->
+    <button type="button" class="btn btn-primary background-btn" data-toggle="modal" data-target="#backgroundModal">
+        更换背景
+    </button>
+    <button type='button' class='btn btn-primary fontcolor-btn' id='fontcolor'>字体颜色</button>
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="backgroundModal" tabindex="-1" role="dialog" aria-labelledby="backgroundModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="backgroundModalLabel">选择背景</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="关闭">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <img src="{{ url_for('static', filename='images/thumb/bg_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg.jpg')}}">
+                <img src="{{ url_for('static', filename='images/thumb/bg1_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg1.jpg')}}">
+                <img src="{{ url_for('static', filename='images/thumb/bg2_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg2.jpg')}}">
+                <img src="{{ url_for('static', filename='images/thumb/bg3_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg3.jpg')}}">
+                <img src="{{ url_for('static', filename='images/thumb/bg4_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg4.jpg')}}">
+                <img src="{{ url_for('static', filename='images/thumb/bg5_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg5.jpg')}}">
+                <img src="{{ url_for('static', filename='images/thumb/bg6_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg6.jpg')}}">
+                <img src="{{ url_for('static', filename='images/thumb/bg7_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg7.jpg')}}">
 
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+        </div>
+    </div>
     <footer>
         <small>&copy; 2024 <a href="https://github.com/9xxxxxx/watchlist">GArryHOst</a></small>
     </footer>

@@ -21,13 +21,13 @@ def index():
             flash('Invalid input.')
             return redirect(url_for('index'))
         
-        movie = Movie(title=title, year=year, poster=poster)
+        movie = Movie(title=title, year=year, poster=poster,time=datetime.now())
         db.session.add(movie)
         db.session.commit()
         flash('Item created.')
         return redirect(url_for('index'))
 
-    movies = Movie.query.all()
+    movies = Movie.query.limit(10).all()
     return render_template('index.html', movies=movies)
 
 
@@ -163,3 +163,12 @@ def comment(movie_id):
     
     form = CommentForm()
     return render_template('comment.html', form=form)
+
+@app.route('/movie/<int:page>')
+def items(page):
+    # page = request.args.get('page', 1, type=int)
+    # per_page = 10  # Define how many items per page you want
+    # pagination = Movie.query.paginate(page, per_page, error_out=False)
+    # items = pagination.items
+    movies = Movie.query.all()
+    return render_template('index.html', movies=movies)
