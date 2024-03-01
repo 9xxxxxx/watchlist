@@ -7,6 +7,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.security import generate_password_hash
 from watchlist.myform import LoginForm, RegisterForm, CommentForm
 
+per_page = 3
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -26,9 +27,11 @@ def index():
         db.session.commit()
         flash('Item created.')
         return redirect(url_for('index'))
-
-    movies = Movie.query.limit(10).all()
-    return render_template('index.html', movies=movies)
+    page = request.args.get('page', 1, type=int)
+      # Define how many items per page you want
+    pagination = Movie.query.paginate(page=page, per_page=app.config['PER_PAGE'], error_out=False)
+    items = pagination.items
+    return render_template('index.html', movies=items, pagination=pagination)
 
 
 @app.route('/movie/edit/<int:movie_id>', methods=['GET', 'POST'])
@@ -82,6 +85,8 @@ def login():
             # 验证用户名和密码是否一致
             if username == user.username and user.validate_password(password):
                 login_user(user)
+                user.last_login_time = datetime.now()
+                db.session.commit()
                 flash('Login success.')
                 return redirect(url_for('index'))
         else:
@@ -154,6 +159,8 @@ def comment(movie_id):
         content = request.form.get('Content')
         user_id = current_user.id
         time = datetime.now()
+        username = current_user.username
+        name = current_user.name
         
         comment = Comment(movie_id=movie_id, content=content, user_id=user_id, time=time)
         db.session.add(comment)
@@ -166,9 +173,8 @@ def comment(movie_id):
 
 @app.route('/movie/<int:page>')
 def items(page):
-    # page = request.args.get('page', 1, type=int)
-    # per_page = 10  # Define how many items per page you want
-    # pagination = Movie.query.paginate(page, per_page, error_out=False)
-    # items = pagination.items
-    movies = Movie.query.all()
-    return render_template('index.html', movies=movies)
+  # Define how many items per page you want
+    pagination = Movie.query.paginate(page=page, per_page=app.config['PER_PAGE'], error_out=False) 
+    top_ten_items = pagination.items
+    action_url = url_for('index')
+    return render_template('items.html', movies=top_ten_items, pagination=pagination, action_url=action_url)

@@ -10,7 +10,7 @@
         <input type="text" name="year" autocomplete="off" id="year" required width=100px>
         <label for='poster'>电影海报:</label>
         <input type="text" name="poster" autocomplete='off' id="poster" required placeholder="请输入图片URL" width=120px>
-        <input class="btn btn-primary btn-md" type="submit" name="submit" value="Add" >
+        <input class="btn btn-primary btn-md" type="submit" name="submit" value="Add" ">
     </form>
 </div>
 {% endif %}
@@ -45,7 +45,27 @@
     </li>
     {% endfor %}
 </ul>
+<div class="pagination-container">
+    <ul class="pagination">
+        {%- if pagination.has_prev %}
+        <li><a href="{{ url_for('items', page=pagination.prev_num) }}">«</a></li>
+        {%- endif %}
+    
+        {% for page in pagination.iter_pages() %}
+        {% if page %}
+        {% if page != pagination.page %}
+        <li><a href="{{ url_for('items', page=page) }}">{{ page }}</a></li>
+        {% else %}
+        <li class="active">{{ page }}</li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
 
+        {%- if pagination.has_next %}
+        <li><a href="{{ url_for('items', page=pagination.next_num) }}">»</a></li>
+        {%- endif %}
+    </ul>
+</div>
 
 <img alt="Walking Totoro" class="girl2" src="{{ url_for('static', filename='images/redhair.gif') }}" title="to~to~ro~">
 {% endblock %}

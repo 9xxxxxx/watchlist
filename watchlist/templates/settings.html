@@ -2,9 +2,5 @@
 
 {% block content %}
 <h3>Settings</h3>
-<form method="post">
-    <label for="name">Your Name: </label>
-    <input type="text" name="name" id='name' autocomplete="off" required value="{{ current_user.name }}">
-    <input class="btn btn-primary btn-md" type="submit" name="submit" value="Save">
-</form>
+{{ render_form(form) }}
 {% endblock %}

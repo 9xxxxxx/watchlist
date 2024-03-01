@@ -21,7 +21,7 @@
     {% endblock %}
 </head>
 <body id='background'>
-    <audio id="music" src="/static/music/Myway.mp3" preload='auto' loop></audio>
+    
     <img src="{{ url_for('static', filename='images/player.gif') }}" alt="player" id="player"></img>
     <h2>
         <img alt="Avatar" class="avatar" src="{{ url_for('static', filename='images/avatar.png') }}">
@@ -70,7 +70,6 @@
                 <img src="{{ url_for('static', filename='images/thumb/bg5_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg5.jpg')}}">
                 <img src="{{ url_for('static', filename='images/thumb/bg6_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg6.jpg')}}">
                 <img src="{{ url_for('static', filename='images/thumb/bg7_thumb.jpg')}}" class="background-thumbnail" data-full-image="{{ url_for('static', filename='images/bg7.jpg')}}">
-
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>

@@ -5,6 +5,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap5
+from flask_migrate import Migrate
+
 
 app = Flask(__name__)
 WIN = sys.platform.startswith('win')
@@ -16,11 +18,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = prefix + os.path.join(os.path.dirname(ap
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev')
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = timedelta(seconds=1)
+app.config['PER_PAGE'] = 3
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 Bootstrap = Bootstrap5(app)
-
+Migrate = Migrate(app, db)
 
 @login_manager.user_loader
 def load_user(user_id):

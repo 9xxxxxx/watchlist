@@ -2,7 +2,7 @@
 {% block content %}
 {% if current_user.is_authenticated %}
 <div class='addmovie'>
-    <form method="post">
+    <form method="post" action="{{ action_url }}" >
         <label for="title">电影名字:</label>
         <input type="text" name="title" autocomplete="off" id="title" required >
         <label for="year">上映时间:</label>
@@ -43,7 +43,27 @@
         </div>
     </li>
     {% endfor %}
-
+<div class="pagination-container">
+    <ul class="pagination">
+        {%- if pagination.has_prev %}
+        <li><a href="{{ url_for('items', page=pagination.prev_num) }}">«</a></li>
+        {%- endif %}
+    
+        {% for page in pagination.iter_pages() %}
+        {% if page %}
+        {% if page != pagination.page %}
+        <li><a href="{{ url_for('items', page=page) }}">{{ page }}</a></li>
+        {% else %}
+        <li class="active">{{ page }}</li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+    
+        {%- if pagination.has_next %}
+        <li><a href="{{ url_for('items', page=pagination.next_num) }}">»</a></li>
+        {%- endif %}
+    </ul>
+</div>
 <img alt="Walking Totoro" class="girl2" src="{{ url_for('static', filename='images/redhair.gif') }}" title="to~to~ro~">
 {% endblock %}
 

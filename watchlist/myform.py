@@ -16,6 +16,7 @@ class RegisterForm(FlaskForm):
 class CommentForm(FlaskForm):
     Content = TextAreaField(id='content',label='')
     submit = SubmitField(id='submit_review')
+    
 
 class SearchForm(FlaskForm):
     keyword = StringField('Keyword', validators=[DataRequired()])
@@ -23,4 +24,7 @@ class SearchForm(FlaskForm):
     
 class UploadMusicForm(FlaskForm):
     file = FileField('MusicFile', validators=[DataRequired()])
+
+class SettingForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
     
