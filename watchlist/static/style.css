@@ -2,7 +2,7 @@
 body {
 margin: auto !important;
 max-width: 880px;
-background-image: url("images/bg.jpg");
+background-image: url("images/bg0.jpg");
 background-size: 100% 100%;
 background-attachment: fixed;
 }
@@ -202,18 +202,6 @@ input::-webkit-input-placeholder {
 color: #054617ae;
 }
 
-.split-text {
-display: flex;
-justify-content: space-between;
-}
-
-.split-text p:nth-child(1) {
-text-align: left;
-}
-
-.split-text p:nth-child(2) {
-text-align: right;
-}
 .poster {
 height: 380px;
 width: 280px;
@@ -332,3 +320,13 @@ padding: 0;
 list-style: none; /* 移除默认的列表样式 */
 gap: 12px;
 }
+
+
+.split-text {
+    display: flex; /* 设定为 flex 容器 */
+    justify-content: space-between; /* 在两端对齐子元素 */
+    flex-wrap: wrap; /* 允许子元素换行 */
+    height: auto;
+}
+
+/* 第三个 p 标签为块级元素将自动换行显示。设置 width 100% 确保其占据整行 */

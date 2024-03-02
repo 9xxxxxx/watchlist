@@ -5,7 +5,7 @@ from flask import redirect, url_for, request, render_template, flash
 from flask_login import current_user, login_required, login_user, logout_user
 
 from werkzeug.security import generate_password_hash
-from watchlist.myform import LoginForm, RegisterForm, CommentForm
+from watchlist.myform import LoginForm, RegisterForm, CommentForm, SettingForm
 
 per_page = 3
 @app.route('/', methods=['GET', 'POST'])
@@ -110,7 +110,7 @@ def logout():
 def settings():
     if request.method == 'POST':
         name = request.form['name']
-
+        
         if not name or len(name) > 20:
             flash('Invalid input.')
             return redirect(url_for('settings'))
@@ -118,8 +118,8 @@ def settings():
         db.session.commit()
         flash('Settings updated.')
         return redirect(url_for('index'))
-    
-    return render_template('settings.html')
+    form = SettingForm()
+    return render_template('settings.html', form=form)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -137,7 +137,7 @@ def signup():
             flash('The username is already existed.')
             return redirect(url_for('signup'))
 
-        user = User(name='guest', username=username, password_hash=generate_password_hash(password))
+        user = User(name='guest', username=username, password_hash=generate_password_hash(password), avatar =url_for('static', filename='images/default_avatar.png'))
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('login'))
@@ -162,7 +162,11 @@ def comment(movie_id):
         username = current_user.username
         name = current_user.name
         
-        comment = Comment(movie_id=movie_id, content=content, user_id=user_id, time=time)
+        comment = Comment(movie_id=movie_id, content=content, 
+                          user_id=user_id, time=time,
+                          username=username, name=name,
+                          updated_at = datetime.now())
+        # 相当于创建新的一行数据
         db.session.add(comment)
         db.session.commit()
         

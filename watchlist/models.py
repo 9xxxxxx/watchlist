@@ -12,6 +12,7 @@ class User(db.Model, UserMixin):
     last_login = db.Column(db.DateTime, default=db.func.now())
     bio = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=db.func.now())
+    avatar = db.Column(db.String(128))
 
     def set_password(self, password):         
         self.password_hash = generate_password_hash(password)
@@ -39,5 +40,8 @@ class Comment(db.Model):
     username = db.Column(db.String(40))
     name = db.Column(db.String(40))
 
-
+class Theme(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    alt = db.Column(db.String(128))
+    path = db.Column(db.String(128))
     

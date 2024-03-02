@@ -35,9 +35,13 @@
 <ul class='comment-list'>
     {% for comment in comments %}
     <li>
+        <image src="{{current_user.avatar}}">
         <div class="split-text">
-            <p>{{ comment.content }} </p>
+            <p>{{current_user.name}}:</p>
             <p>{{ comment.time.strftime("%Y-%m-%d %H:%M:%S")}}</p>
+        </div>
+        <div>
+            <p>{{ comment.content }}</p>
         </div>
     </li>
     {% endfor %}

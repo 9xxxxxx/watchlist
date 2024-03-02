@@ -27,4 +27,6 @@ class UploadMusicForm(FlaskForm):
 
 class SettingForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
+    submit = SubmitField()
+   
     

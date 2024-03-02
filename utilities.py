@@ -17,7 +17,7 @@ def thumbnail(path):
         if im.mode == 'P' or im.mode == 'RGBA':
             im = im.convert('RGB')
         # resize image
-        # im.thumbnail((500, 300))
+        # im.thumbnail((150, 90))
         im = im.resize((500, 300))
         # save image
         im.save(newpath, 'JPEG')
@@ -68,8 +68,9 @@ def getimage():
                 print(f'An error occurred: {e}')
 
 
+        
+        
 
- 
     
 if __name__ == '__main__':
     
